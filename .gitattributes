@@ -1,0 +1,7 @@
+* text=auto
+
+/.* export-ignore
+/languages/messages.pot export-ignore
+/languages/*/LC_MESSAGES/*.po export-ignore
+/js/build/*.js export-ignore
+/css/scss/*.scss export-ignore
