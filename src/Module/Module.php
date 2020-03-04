@@ -1,7 +1,6 @@
 <?php
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
-use Concrete\Core\Entity\Site\Site;
 use Concrete\Core\Filesystem\Element;
 use Xanweb\Module\Module as AbstractModule;
 
@@ -30,20 +29,22 @@ class Module extends AbstractModule
     }
 
     /**
-     * @param Site $site active site for editing
+     * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
      *
      * @return Element
      */
-    public static function getDashboardOptionsElement(Site $site)
+    public static function getDashboardOptionsElement($siteTree)
     {
-        return new Element('dashboard/options', self::pkgHandle(), [$site]);
+        return new Element('dashboard/options', self::pkgHandle(), ['siteTree' => $siteTree]);
     }
 
     /**
+     * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
+     *
      * @return Element
      */
-    public static function getOptoutOptionsElement()
+    public static function getOptoutOptionsElement($siteTree)
     {
-        return new Element('optout/options', self::pkgHandle());
+        return new Element('optout/options', self::pkgHandle(), ['siteTree' => $siteTree]);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Controller\Element\Dashboard;
 
-use Concrete\Core\Entity\Site\Site;
 use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Controller\ElementController;
 use Concrete\Package\ActiveCookieConsent\Dashboard\Element\SavableInterface;
@@ -12,15 +11,19 @@ class Options extends ElementController implements SavableInterface
     protected $helpers = ['form'];
 
     /**
-     * @var Site
+     * @var \Concrete\Core\Entity\Site\SiteTree
      */
-    protected $site;
+    protected $siteTree;
 
-    public function __construct(Site $site)
+    /**
+     * Options constructor.
+     * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
+     */
+    public function __construct($siteTree)
     {
         parent::__construct();
 
-        $this->site = $site;
+        $this->siteTree = $siteTree;
         $this->pkgHandle = Module::pkgHandle();
     }
 
@@ -32,10 +35,13 @@ class Options extends ElementController implements SavableInterface
     public function view()
     {
         $config = Module::getConfig();
-
-        $this->set('youtube', $config->get("{$this->site->getSiteHandle()}.youtube", ['enabled' => 0]));
-        $this->set('gmap', $config->get("{$this->site->getSiteHandle()}.gmap", ['enabled' => 0]));
-        $this->set('cookieDisclaimer', $config->get("{$this->site->getSiteHandle()}.cookieDisclaimer", ['title' => t('Third Party'), 'description' => '']));
+        $this->set('cookieDisclaimer', $config->get("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer", function () {
+            $loc = app('Concrete\Core\Localization\Localization');
+            $loc->setContextLocale('SITE_SECTION', $this->siteTree->getLocale()->getLocale());
+            return $loc->withContext('SITE_SECTION', function () {
+                return Module::getFileConfig()->get('cookie_disclaimer.third_party');
+            });
+        }));
     }
 
     /**
@@ -47,10 +53,8 @@ class Options extends ElementController implements SavableInterface
         $thirdPartyData = $this->request->request->get('thirdParty', []);
 
         $config = Module::getConfig();
-        $config->save("{$this->site->getSiteHandle()}.youtube.enabled", array_get($thirdPartyData, 'youtube.enabled', 0));
-        $config->save("{$this->site->getSiteHandle()}.gmap.enabled", array_get($thirdPartyData, 'gmap.enabled', 0));
-        $config->save("{$this->site->getSiteHandle()}.cookieDisclaimer.title", array_get($thirdPartyData, 'cookieDisclaimer.title', ''));
-        $config->save("{$this->site->getSiteHandle()}.cookieDisclaimer.description", array_get($thirdPartyData, 'cookieDisclaimer.description', ''));
+        $config->save("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer.title", array_get($thirdPartyData, 'cookieDisclaimer.title', ''));
+        $config->save("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer.description", array_get($thirdPartyData, 'cookieDisclaimer.description', ''));
 
         return $e;
     }

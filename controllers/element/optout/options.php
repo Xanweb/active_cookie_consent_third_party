@@ -9,10 +9,20 @@ class Options extends ElementController
 {
     protected $helpers = ['form'];
 
-    public function __construct()
+    /**
+     * @var \Concrete\Core\Entity\Site\SiteTree
+     */
+    protected $siteTree;
+
+    /**
+     * Options constructor.
+     * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
+     */
+    public function __construct($siteTree)
     {
         parent::__construct();
 
+        $this->siteTree = $siteTree;
         $this->pkgHandle = Module::pkgHandle();
     }
 
@@ -23,13 +33,14 @@ class Options extends ElementController
 
     public function view()
     {
-        $site = $this->app->make('site')->getSite();
-
         $config = Module::getConfig();
-        $this->set('youtubeEnabled', $config->get("{$site->getSiteHandle()}.youtube.enabled", false));
-        $this->set('gmapEnabled', $config->get("{$site->getSiteHandle()}.gmap.enabled", false));
-        $this->set('title', $config->get("{$site->getSiteHandle()}.cookieDisclaimer.title", t('Third Party')));
-        $this->set('description', $config->get("{$site->getSiteHandle()}.cookieDisclaimer.description", ''));
+        $this->set('title', $config->get("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer.title", function () {
+            return Module::getFileConfig()->get('cookie_disclaimer.third_party.title');
+        }));
+
+        $this->set('description', $config->get("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer.description", function () {
+            return Module::getFileConfig()->get('cookie_disclaimer.third_party.description');
+        }));
 
         $thirdPartyCheckboxField = new Input('checkbox');
         $thirdPartyCheckboxField->addClass(['custom-control-input', 'third-party-switcher']);
