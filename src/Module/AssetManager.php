@@ -27,7 +27,7 @@ class AssetManager
             'block/youtube' => [
                 [
                     ['vendor-javascript', 'js-cookie'],
-                    ['javascript', 'dp/base'],
+                    ['javascript', 'acc/base'],
                     ['javascript', 'block/youtube'],
                     ['css', 'block/youtube'],
                 ],
@@ -35,7 +35,7 @@ class AssetManager
             'block/google-map' => [
                 [
                     ['vendor-javascript', 'js-cookie'],
-                    ['javascript', 'dp/base'],
+                    ['javascript', 'acc/base'],
                     ['javascript', 'block/google-map'],
                     ['css', 'block/google-map'],
                 ],

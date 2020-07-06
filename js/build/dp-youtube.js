@@ -1,6 +1,6 @@
 !function(global, $) {
     'use strict';
-    var CookieConsent = global.XDP.CookieConsent;
+    var CookieConsent = global.ACC.CookieConsent;
 
     function XWACCYoutube($element, options) {
         var my = this;
@@ -40,7 +40,7 @@
 
     $.fn.xwACCYoutube = function(options) {
         return $.each($(this), function(i, obj) {
-            new DataProtectionYoutube($(this), options);
+            new XWACCYoutube($(this), options);
         });
     };
 

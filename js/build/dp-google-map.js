@@ -1,7 +1,7 @@
 !function(global, $) {
     'use strict';
 
-    var CookieConsent = global.XDP.CookieConsent;
+    var CookieConsent = global.ACC.CookieConsent;
 
     function XWACCGoogleMap(element, options) {
         var my = this;
