@@ -1,14 +1,17 @@
 <?php defined('C5_EXECUTE') or die('Access Denied.');
- /**
-  * @var HtmlObject\Input $thirdPartyCheckboxField
-  */
+/**
+ * @var HtmlObject\Input $thirdPartyCheckboxField
+ */
+
 ?>
 
 <div class="card h-100">
     <div class="card-header">
-        <div class="checkbox">
-            <label><?= $thirdPartyCheckboxField; ?><strong><?= $title; ?></strong></label>
-        </div>
+        <label class="ios-toggler-wrapper">
+            <strong><?= $title; ?></strong>
+            <?= $thirdPartyCheckboxField; ?>
+            <span class="ios-toggler-ui"></span>
+        </label>
     </div>
     <div class="card-body">
         <p><?= $description; ?></p>
