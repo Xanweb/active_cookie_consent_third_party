@@ -45,6 +45,6 @@ class Module extends AbstractModule
      */
     public static function getOptoutOptionsElement($siteTree)
     {
-        return new Element('optout/options', self::pkgHandle(), ['siteTree' => $siteTree]);
+        return new Element('third_party_optout/options', self::pkgHandle(), ['siteTree' => $siteTree]);
     }
 }

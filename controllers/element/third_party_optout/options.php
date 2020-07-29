@@ -1,5 +1,5 @@
 <?php
-namespace Concrete\Package\ActiveCookieConsentThirdParty\Controller\Element\Optout;
+namespace Concrete\Package\ActiveCookieConsentThirdParty\Controller\Element\ThirdPartyOptout;
 
 use Concrete\Core\Controller\ElementController;
 use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
@@ -28,7 +28,7 @@ class Options extends ElementController
 
     public function getElement()
     {
-        return 'optout/options';
+        return 'third_party_optout/options';
     }
 
     public function view()
