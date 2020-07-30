@@ -92,7 +92,7 @@ $.fn.xwACCGoogleMap = function (options) {
 
 // Setup AutoStart
 $(function () {
-    const gmapCanvas = $('div.googleMapCanvas');
+    const gmapCanvas = $('div.googleMapCanvas')
     if (gmapCanvas.length > 0) {
         gmapCanvas.xwACCGoogleMap()
     }

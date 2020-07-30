@@ -64,7 +64,7 @@ $.fn.xwACCYoutube = function(options) {
 
 // Setup AutoStart
 $(function () {
-    const youtubePlayer = $('div.youtubeBlock');
+    const youtubePlayer = $('div.youtubeBlock')
     if (youtubePlayer.length > 0) {
         youtubePlayer.xwACCYoutube()
     }
