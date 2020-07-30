@@ -43,7 +43,7 @@ class Options extends ElementController
         }));
 
         $thirdPartyCheckboxField = new Input('checkbox');
-        $thirdPartyCheckboxField->addClass(['ios-toggler','ios-toggler--round-flat','ios-toggler--sm', 'third-party-switcher']);
+        $thirdPartyCheckboxField->addClass(['ios-toggler','ios-toggler--round-flat','ios-toggler--sm', 'type-switcher']);
         if ($this->app['helper/concrete/dashboard']->canRead()) {
             $thirdPartyCheckboxField->addClass('launch-tooltip disabled');
             $thirdPartyCheckboxField->setAttributes([
