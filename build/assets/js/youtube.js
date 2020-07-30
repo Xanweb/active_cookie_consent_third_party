@@ -48,11 +48,12 @@ class Youtube {
     }
 
     showVideo() {
-        this.$iframe.prop('src', this.src);
+        this.$iframe.prop('src', this.src)
+        this.$element.find('button.display-cookies-disclaimer-popup').remove()
     }
 
     blockVideo() {
-        this.$element.append(this.buttonTemplate);
+        this.$element.append(this.buttonTemplate)
     }
 }
 
