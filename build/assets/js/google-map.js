@@ -86,14 +86,14 @@ class GoogleMap {
 
 $.fn.xwACCGoogleMap = function (options) {
     return $.each($(this), function (i, obj) {
-        new GoogleMap(this, options);
-    });
-};
+        new GoogleMap(this, options)
+    })
+}
 
 // Setup AutoStart
 $(function () {
-    var gmapCanvas = $('div.googleMapCanvas');
+    const gmapCanvas = $('div.googleMapCanvas');
     if (gmapCanvas.length > 0) {
-        gmapCanvas.xwACCGoogleMap();
+        gmapCanvas.xwACCGoogleMap()
     }
-});
+})
