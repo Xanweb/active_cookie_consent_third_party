@@ -11,7 +11,7 @@ class Module extends AbstractModule
      *
      * @see AbstractModule::pkgHandle()
      */
-    public static function pkgHandle()
+    public static function pkgHandle(): string
     {
         return 'active_cookie_consent_third_party';
     }

@@ -14,12 +14,12 @@ class AssetManager
         $al = AssetList::getInstance();
         $al->registerMultiple([
             'block/youtube' => [
-                ['css', 'css/youtube.css', ['minify' => true], $pkg],
-                ['javascript', 'js/dp-youtube.js', ['minify' => false], $pkg],
+                ['css', 'css/youtube.css', ['minify' => false], $pkg],
+                ['javascript', 'js/youtube.js', ['minify' => false], $pkg],
             ],
             'block/google-map' => [
-                ['css', 'css/google-map.css', ['minify' => true], $pkg],
-                ['javascript', 'js/dp-google-map.js', ['minify' => false], $pkg],
+                ['css', 'css/google-map.css', ['minify' => false], $pkg],
+                ['javascript', 'js/google-map.js', ['minify' => false], $pkg],
             ],
         ]);
 
