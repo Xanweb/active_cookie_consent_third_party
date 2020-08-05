@@ -9,6 +9,8 @@ class Youtube {
         my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
         if (!my.active) {
             my.blockVideo()
+        } else {
+            my.showVideo()
         }
 
         window.ACC.registerThirdParty(this)

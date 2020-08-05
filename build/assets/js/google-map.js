@@ -27,6 +27,8 @@ class GoogleMap {
         my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: '+ my.height +';"><p>'+ my.alt +'</p><button class="btn btn-info center-block display-cookies-disclaimer-popup">'+ my.buttonText +'</button></div>'
         if (!my.active) {
             my.blockGoogleMap()
+        } else {
+            my.showGoogleMap()
         }
 
         window.ACC.registerThirdParty(this)
@@ -80,7 +82,7 @@ class GoogleMap {
 
     blockGoogleMap() {
         const my = this
-        my.$element.replaceWith(my.blockGoogleMapTemplate)
+        my.$element.append(my.blockGoogleMapTemplate)
     }
 }
 
