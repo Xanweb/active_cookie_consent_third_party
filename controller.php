@@ -10,12 +10,12 @@ class Controller extends Package implements ProviderInterface
 {
     protected $pkgHandle = 'active_cookie_consent_third_party';
     protected $appVersionRequired = '8.5.1';
-    protected $pkgVersion = '1.2.0';
+    protected $pkgVersion = '1.2.1';
     protected $pkgAutoloaderRegistries = [
         'src' => 'Concrete\Package\ActiveCookieConsentThirdParty',
     ];
 
-    protected $packageDependencies = ['active_cookie_consent' => true];
+    protected $packageDependencies = ['active_cookie_consent' => '1.1'];
 
     private $blocksOverride = ['youtube', 'google_map'];
 
