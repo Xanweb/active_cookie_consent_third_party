@@ -2,7 +2,8 @@
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
 use Concrete\Core\Filesystem\Element;
-use Xanweb\Module\Module as AbstractModule;
+use Concrete\Core\Foundation\ClassAliasList;
+use Concrete\Package\ActiveCookieConsent\Module\Module as AbstractModule;
 
 class Module extends AbstractModule
 {
@@ -23,7 +24,8 @@ class Module extends AbstractModule
      */
     public static function boot()
     {
-        parent::boot();
+        $aliasList = ClassAliasList::getInstance();
+        $aliasList->registerMultiple(static::getClassAliases());
 
         AssetManager::register();
     }

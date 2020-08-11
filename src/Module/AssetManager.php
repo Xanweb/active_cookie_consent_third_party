@@ -2,12 +2,9 @@
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
 use Concrete\Core\Asset\AssetList;
-use Xanweb\Foundation\Traits\StaticApplicationTrait;
 
 class AssetManager
 {
-    use StaticApplicationTrait;
-
     public static function register()
     {
         $pkg = Module::pkg();
