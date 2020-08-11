@@ -6,13 +6,10 @@
     "Cookie Consent", "GoogleMaps", "Youtube", "Active Cookie Consent"
   ],
   "license": "proprietary",
-  "minimum-stability": "dev",
   "require": {
-    "composer/installers": "~1.0",
-    "xanweb/c5-foundation": "^1.0",
-    "xanweb/c5-module": "^1.0"
+    "composer/installers": "~1.0"
   },
   "support": {
-    "source": "https://github.com/xanweb/active-cookie-consent-third-party"
+    "source": "https://github.com/Xanweb/active_cookie_consent_third_party"
   }
 }
