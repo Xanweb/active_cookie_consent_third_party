@@ -35,8 +35,9 @@ class Options extends ElementController implements SavableInterface
     public function view()
     {
         $config = Module::getConfig();
-        $this->set('cookieDisclaimer', $config->get("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer", function () {
-            $loc = app('Concrete\Core\Localization\Localization');
+        $app = $this->app;
+        $this->set('cookieDisclaimer', $config->get("{$this->siteTree->getSiteTreeID()}.cookieDisclaimer", function () use ($app) {
+            $loc = $app->make('Concrete\Core\Localization\Localization');
             $loc->setContextLocale('SITE_SECTION', $this->siteTree->getLocale()->getLocale());
             return $loc->withContext('SITE_SECTION', function () {
                 return Module::getFileConfig()->get('cookie_disclaimer.third_party');
