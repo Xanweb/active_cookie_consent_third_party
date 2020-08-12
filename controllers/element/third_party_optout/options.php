@@ -15,6 +15,12 @@ class Options extends ElementController
     protected $siteTree;
 
     /**
+     * @var string
+     */
+
+    private $template = 'options';
+
+    /**
      * Options constructor.
      * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
      */
@@ -26,9 +32,19 @@ class Options extends ElementController
         $this->pkgHandle = Module::pkgHandle();
     }
 
+    /**
+     * @param string $template
+     */
+    public function setTemplate(string $template)
+    {
+        $this->template = $template;
+    }
+
+
+
     public function getElement()
     {
-        return 'third_party_optout/options';
+        return "third_party_optout/{$this->template}";
     }
 
     public function view()
