@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Controller\Element\ThirdPartyOptout;
 
 use Concrete\Core\Controller\ElementController;
@@ -17,11 +18,11 @@ class Options extends ElementController
     /**
      * @var string
      */
-
     private $template = 'options';
 
     /**
      * Options constructor.
+     *
      * @param \Concrete\Core\Entity\Site\SiteTree $siteTree
      */
     public function __construct($siteTree)
@@ -40,8 +41,6 @@ class Options extends ElementController
         $this->template = $template;
     }
 
-
-
     public function getElement()
     {
         return "third_party_optout/{$this->template}";
@@ -59,7 +58,7 @@ class Options extends ElementController
         }));
 
         $thirdPartyCheckboxField = new Input('checkbox');
-        $thirdPartyCheckboxField->addClass(['ios-toggler','ios-toggler--round-flat','ios-toggler--sm', 'type-switcher']);
+        $thirdPartyCheckboxField->addClass(['ios-toggler', 'ios-toggler--round-flat', 'ios-toggler--sm', 'type-switcher']);
         $thirdPartyCheckboxField->setAttribute('data-type', 'thirdParty');
         if ($this->app['helper/concrete/dashboard']->canRead()) {
             $thirdPartyCheckboxField->addClass('launch-tooltip disabled');
