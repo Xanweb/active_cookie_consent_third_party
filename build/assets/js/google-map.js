@@ -1,5 +1,5 @@
 class GoogleMap {
-    constructor(element, options) {
+    constructor(element) {
         const my = this
         my.element = element
         my.$element = $(element)
@@ -86,16 +86,8 @@ class GoogleMap {
     }
 }
 
-$.fn.xwACCGoogleMap = function (options) {
-    return $.each($(this), function (i, obj) {
-        new GoogleMap(this, options)
+window.concreteGoogleMapInit = () => {
+    $('.googleMapCanvas').each(function () {
+        new GoogleMap(this)
     })
 }
-
-// Setup AutoStart
-$(function () {
-    const gmapCanvas = $('div.googleMapCanvas')
-    if (gmapCanvas.length > 0) {
-        gmapCanvas.xwACCGoogleMap()
-    }
-})

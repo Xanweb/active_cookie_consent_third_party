@@ -6,6 +6,11 @@
     "Cookie Consent", "GoogleMaps", "Youtube", "Active Cookie Consent"
   ],
   "license": "proprietary",
+  "scripts": {
+    "translate": "..\\..\\concrete\\bin\\concrete5 c5:translate-package-except-core active_cookie_consent_third_party -l de_DE",
+    "phpcs": "..\\..\\concrete\\bin\\concrete5 c5:phpcs --no-cache -p 7.2 -- fix controller.php src/ blocks/ config/ controllers/ elements/",
+    "force-update": "..\\..\\concrete\\bin\\concrete5 c5:package:update -f -- active_cookie_consent_third_party"
+  },
   "require": {
     "composer/installers": "~1.0"
   },

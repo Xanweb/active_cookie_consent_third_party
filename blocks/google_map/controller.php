@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Block\GoogleMap;
 
 use Concrete\Block\GoogleMap\Controller as CoreController;
@@ -8,6 +9,7 @@ class Controller extends CoreController
     public function registerViewAssets($outputContent = '')
     {
         parent::registerViewAssets($outputContent);
+
         $this->requireAsset('block/google-map');
     }
 

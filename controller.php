@@ -1,16 +1,17 @@
 <?php
+
 namespace Concrete\Package\ActiveCookieConsentThirdParty;
 
-use Concrete\Core\Package\Package;
 use Concrete\Core\Block\BlockType\BlockType;
 use Concrete\Core\Database\EntityManager\Provider\ProviderInterface;
+use Concrete\Core\Package\Package;
 use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
 
 class Controller extends Package implements ProviderInterface
 {
     protected $pkgHandle = 'active_cookie_consent_third_party';
     protected $appVersionRequired = '8.5.1';
-    protected $pkgVersion = '1.2.1';
+    protected $pkgVersion = '1.2.2';
     protected $pkgAutoloaderRegistries = [
         'src' => 'Concrete\Package\ActiveCookieConsentThirdParty',
     ];
@@ -47,6 +48,21 @@ class Controller extends Package implements ProviderInterface
         return $pkg;
     }
 
+    public function uninstall()
+    {
+        $this->restoreOverriddenBlocks();
+
+        parent::uninstall();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDrivers()
+    {
+        return [];
+    }
+
     /**
      * Override Block By Package.
      *
@@ -61,13 +77,6 @@ class Controller extends Package implements ProviderInterface
         }
     }
 
-    public function uninstall()
-    {
-        $this->restoreOverriddenBlocks();
-
-        parent::uninstall();
-    }
-
     /**
      * Restore Overridden Blocks.
      */
@@ -78,13 +87,5 @@ class Controller extends Package implements ProviderInterface
             $blockYoutube->setPackageID(0);
             $blockYoutube->refresh();
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDrivers()
-    {
-        return [];
     }
 }

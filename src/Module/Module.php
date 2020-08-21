@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
 use Concrete\Core\Filesystem\Element;
