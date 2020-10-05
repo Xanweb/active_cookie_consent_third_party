@@ -22,7 +22,7 @@ echo Core::make('helper/concrete/ui')->tabs([
 <div class="ccm-tab-content" id="ccm-tab-content-video">
     <div class="form-group">
         <label class="control-label"><?php echo t('YouTube URL'); ?></label>
-        <?php echo $form->text('videoURL', isset($videoURL) ? $videoURL : '', ['required' => 'required']); ?>
+        <?php echo $form->text('videoURL', $videoURL ?? '', ['required' => 'required']); ?>
     </div>
     <div class="form-group">
         <label class="control-label"><?=t('Size'); ?></label>
@@ -45,7 +45,7 @@ echo Core::make('helper/concrete/ui')->tabs([
             </label>
         </div>
     </div>
-    <div id="fixedsizes" class="<?php echo $sizing == 'fixed' ? '' : 'hidden'; ?>">
+    <div id="fixedsizes" class="<?php echo $sizing === 'fixed' ? '' : 'hidden'; ?>">
         <div class="form-group">
             <label class="control-label"><?php echo t('Width'); ?></label>
             <div class="input-group">
@@ -70,13 +70,13 @@ echo Core::make('helper/concrete/ui')->tabs([
                 <div class="form-group">
                     <div class="checkbox">
                         <label>
-                            <?php echo $form->checkbox('showinfo', 1, (isset($showinfo) ? $showinfo : true)); ?>
+                            <?php echo $form->checkbox('showinfo', 1, ($showinfo ?? true)); ?>
                             <?php echo t('Show video information'); ?>
                         </label>
                     </div>
                     <div class="checkbox">
                         <label>
-                            <?php echo $form->checkbox('controls', 1, (isset($controls) ? $controls : true)); ?>
+                            <?php echo $form->checkbox('controls', 1, ($controls ?? true)); ?>
                             <?php echo t('Show controls'); ?>
                         </label>
                     </div>
@@ -84,10 +84,10 @@ echo Core::make('helper/concrete/ui')->tabs([
                         <label>
                             <?php
                             $disabledattr = [];
-                            if (isset($color) && $color == 'white') {
+                            if (isset($color) && $color === 'white') {
                                 $disabledattr['disabled'] = 'disabled';
                             }
-                            echo $form->checkbox('modestbranding', 1, (isset($modestbranding) ? $modestbranding : true), $disabledattr); ?>
+                            echo $form->checkbox('modestbranding', 1, $modestbranding ?? true, $disabledattr); ?>
                             <?php echo t('Hide YouTube Logo'); ?>
                         </label>
                     </div>
@@ -97,7 +97,7 @@ echo Core::make('helper/concrete/ui')->tabs([
             <div class="col-xs-6">
                 <div class="form-group controls-only <?php echo isset($controls) && $controls == 0 ? 'hidden' : ''; ?>">
                     <?php  echo $form->label('color', t('Progress Bar Color')); ?>
-                    <?php  echo $form->select('color', ['red' => t('Red'), 'white' => t('White')], isset($color) ? $color : null); ?>
+                    <?php  echo $form->select('color', ['red' => t('Red'), 'white' => t('White')], $color ?? null); ?>
                 </div>
             </div>
         </div>
@@ -113,7 +113,7 @@ echo Core::make('helper/concrete/ui')->tabs([
             </div>
             <div class="checkbox">
                 <label>
-                    <?php echo $form->checkbox('iv_load_policy', 1, isset($iv_load_polict) && $iv_load_policy == 3); ?>
+                    <?php echo $form->checkbox('iv_load_policy', 1, isset($iv_load_policy) && $iv_load_policy === 3); ?>
                     <?php echo t('Hide annotations by default'); ?>
                 </label>
             </div>
@@ -142,7 +142,7 @@ echo Core::make('helper/concrete/ui')->tabs([
                 </label>
             </div>
             <div class="form-group">
-                <?php echo $form->text('startTime', isset($startTime) ? $startTime : null); ?>
+                <?php echo $form->text('startTime', $startTime ?? null); ?>
             </div>
 
         </div>
@@ -168,7 +168,7 @@ echo Core::make('helper/concrete/ui')->tabs([
         });
 
         $('#color').change(function(){
-            if ($(this).val() == 'white') {
+            if ($(this).val() === 'white') {
                 $('#modestbranding').prop('disabled','disabled').prop('checked',false);
             } else {
                 $('#modestbranding').removeProp('disabled');

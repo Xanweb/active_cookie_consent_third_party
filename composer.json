@@ -14,6 +14,11 @@
   "require": {
     "composer/installers": "~1.0"
   },
+  "autoload": {
+    "psr-4": {
+      "Concrete\\Package\\ActiveCookieConsentThirdParty\\": "src"
+    }
+  },
   "support": {
     "source": "https://github.com/Xanweb/active_cookie_consent_third_party"
   }

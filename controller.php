@@ -12,9 +12,6 @@ class Controller extends Package implements ProviderInterface
     protected $pkgHandle = 'active_cookie_consent_third_party';
     protected $appVersionRequired = '8.5.1';
     protected $pkgVersion = '1.2.2';
-    protected $pkgAutoloaderRegistries = [
-        'src' => 'Concrete\Package\ActiveCookieConsentThirdParty',
-    ];
 
     protected $packageDependencies = ['active_cookie_consent' => '1.1'];
 
@@ -53,6 +50,18 @@ class Controller extends Package implements ProviderInterface
         $this->restoreOverriddenBlocks();
 
         parent::uninstall();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPackageAutoloaderRegistries(): array
+    {
+        if (!class_exists('Concrete\Package\ActiveCookieConsentThirdParty\Module\Module')) {
+            return ['src' => 'Concrete\Package\ActiveCookieConsentThirdParty'];
+        }
+
+        return [];
     }
 
     /**
