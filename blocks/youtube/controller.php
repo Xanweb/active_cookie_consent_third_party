@@ -3,6 +3,7 @@
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Block\Youtube;
 
 use Concrete\Block\Youtube\Controller as CoreController;
+use Concrete\Package\ActiveCookieConsent\Service\Entity\CookieDisclaimerSetting as CookieSettingSVC;
 
 class Controller extends CoreController
 {
@@ -14,7 +15,10 @@ class Controller extends CoreController
     public function view()
     {
         parent::view();
-
+        $siteTree = $this->getCollectionObject()->getSiteTreeObject();
+        $cookieSettingSVC = $this->app->make(CookieSettingSVC::class);
+        $cookieSetting = is_object($siteTree) ? $cookieSettingSVC->getOrCreateByTree($siteTree) : null;
+        $this->set('popupMessage',$cookieSetting->getPopupMessageDisplay());
         $this->set('activeIframe', $this->app['helper/concrete/dashboard']->canRead());
     }
 

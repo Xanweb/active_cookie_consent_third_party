@@ -13,6 +13,9 @@ class GoogleMap {
         my.height = my.$element.data('height')
         my.alt = my.$element.data('alt') || ''
         my.buttonText = my.$element.data('buttonText') || 'Accept Third Party'
+        my.popupMessage = my.$element.data('popupMessage')
+        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
+
         my.mapOptions = {
             zoom: my.zoom,
             center: my.latlng,
@@ -24,7 +27,7 @@ class GoogleMap {
         }
 
         my.active = my.$element.data('active') || false
-        my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: '+ my.height +';"><p>'+ my.alt +'</p><button class="btn btn-info center-block display-cookies-disclaimer-popup">'+ my.buttonText +'</button></div>'
+        my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: '+ my.height +';"><div class="block-googlemap-overlay"><div class="popup-message">'+ my.popupMessage +my.buttonTemplate+'</div></div></div>'
         if (!my.active) {
             my.blockGoogleMap()
         } else {

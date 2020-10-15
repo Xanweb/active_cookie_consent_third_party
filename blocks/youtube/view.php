@@ -88,7 +88,7 @@ if (Page::getCurrentPage()->isEditMode()) {
 } else {
     ?>
     <div id="youtube<?= $bID; ?>" class="youtubeBlock <?= $responsiveClass; ?>">
-        <iframe class="youtube-player" <?= $sizeargs; ?> data-src="//<?= $youtubeDomain; ?>/embed/<?= $videoID; ?><?= $paramstring; ?>" data-alt="" data-activate="<?= $activeIframe; ?>" allow="autoplay" allowfullscreen style="background-image: url('https://img.youtube.com/vi/<?= $videoID; ?>/maxresdefault.jpg');background-size: cover;"></iframe>
+        <iframe class="youtube-player" <?= $sizeargs; ?> data-src="//<?= $youtubeDomain; ?>/embed/<?= $videoID; ?><?= $paramstring; ?>" data-alt="" data-activate="<?= $activeIframe; ?>" data-popup-message='<?=$popupMessage;?>' allow="autoplay" allowfullscreen style="background-image: url('https://img.youtube.com/vi/<?= $videoID; ?>/maxresdefault.jpg');background-size: cover;" ></iframe>
     </div>
     <?php
 } ?>

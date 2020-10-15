@@ -6,7 +6,10 @@ class Youtube {
         my.src = my.$iframe.data('src')
         my.alt = my.$iframe.data('alt') || 'Accept Third Party'
         my.active = my.$iframe.data('activate') || 0
+        my.popupMessage = my.$iframe.data('popupMessage')
         my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
+        my.blockYoutubeTemplate = '<div class="block-youtube-overlay"><div class="popup-message">'+ my.popupMessage +my.buttonTemplate+'</div></div>'
+
         if (!my.active) {
             my.blockVideo()
         } else {
@@ -51,11 +54,11 @@ class Youtube {
 
     showVideo() {
         this.$iframe.prop('src', this.src)
-        this.$element.find('button.display-cookies-disclaimer-popup').remove()
+        this.$element.find('.blockYoutubeTemplate').remove()
     }
 
     blockVideo() {
-        this.$element.append(this.buttonTemplate)
+        this.$element.append(this.blockYoutubeTemplate)
     }
 }
 

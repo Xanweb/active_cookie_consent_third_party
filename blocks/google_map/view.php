@@ -29,6 +29,7 @@ if ($c->isEditMode()) {
          data-height="<?= $height; ?>"
          data-alt=""
          data-button-text="<?= t('Accept Third Party'); ?>"
+         data-popup-message='<?=$popupMessage;?>'
     >
     </div>
 <?php
