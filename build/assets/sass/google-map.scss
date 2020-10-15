@@ -16,16 +16,14 @@
         flex-wrap: wrap;
 
         .popup-message {
-            width: 60%;
-            margin-bottom: 30px;
+            width: 55%;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-
-            p {
-                color: white;
-            }
+            background: rgba(255,255,255,.9);
+            padding: 20px 20px 30px 20px;
+            border-radius: 20px;
 
             button.display-cookies-disclaimer-popup {
                 transform: none;
