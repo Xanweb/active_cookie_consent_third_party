@@ -28,7 +28,7 @@ if ($c->isEditMode()) {
          data-width="<?= $width; ?>"
          data-height="<?= $height; ?>"
          data-alt=""
-         data-button-text="<?= t('Accept Third Party'); ?>"
+         data-button-text="<?= t('Please accept third party cookies'); ?>"
          data-popup-message='<?=$popupMessage;?>'
     >
     </div>

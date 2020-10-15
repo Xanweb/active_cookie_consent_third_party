@@ -1,0 +1,236 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: active_cookie_consent_third_party 1.3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-10-15T12:39:37+00:00\n"
+"PO-Revision-Date: 2020-10-15T12:39:43+00:00\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: packages/active_cookie_consent_third_party/controller.php:22
+msgid "Add Support for ThirdParty Cookie Control"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/controller.php:27
+msgid "Third Party Cookie Consent"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:45
+msgid "API Key"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:45
+msgid "The API Key must be enabled for Google Maps and Google Places."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:45
+msgid "API keys can be obtained in the Google Developers Console."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:50
+msgid "Check"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:56
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:275
+msgid "Checking API Key..."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:63
+msgid "Map Title (optional)"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:68
+msgid "Location"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:68
+msgid "Start typing a location (e.g. Apple Store or 235 W 3rd, New York) then click on the correct entry on the list."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:78
+msgid "Zoom"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:89
+msgid "Map Width"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:99
+msgid "Map Height"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:112
+msgid "Enable Scroll Wheel"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:159
+msgid "The place you entered could not be found."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:180
+msgid "Please wait, operation in progress."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:242
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:262
+msgid "The API Key is NOT valid."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:250
+msgid "The API Key is NOT valid for Google Places."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/form_setup_html.php:278
+msgid "The API Key is valid."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/scrapbook.php:4
+msgid "Location: %s"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/scrapbook.php:5
+msgid "Latitude: %s"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/scrapbook.php:6
+msgid "Longitude: %s"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/view.php:11
+msgid "Google Map disabled in edit mode."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/google_map/view.php:31
+msgid "Please accept third party cookies"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:17
+msgid "Video"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:18
+msgid "Settings"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:24
+msgid "YouTube URL"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:28
+msgid "Size"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:32
+msgid "16:9 (widescreen)"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:38
+msgid "4:3"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:44
+msgid "Fixed Size (non-responsive)"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:50
+msgid "Width"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:53
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:60
+msgid "px"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:57
+msgid "Height"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:67
+msgid "Appearance"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:74
+msgid "Show video information"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:80
+msgid "Show controls"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:91
+msgid "Hide YouTube Logo"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:99
+msgid "Progress Bar Color"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:100
+msgid "Red"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:100
+msgid "White"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:106
+msgid "Playback Options"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:111
+msgid "Show related videos when playback ends"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:117
+msgid "Hide annotations by default"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:123
+msgid "Automatically play"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:129
+msgid "Loop video"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:135
+msgid "Show captions"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/form_setup_html.php:141
+msgid "Start video at:"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/blocks/youtube/view.php:84
+msgid "YouTube Video disabled in edit mode."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/config/cookie_disclaimer.php:5
+msgid "Third party"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/config/cookie_disclaimer.php:6
+msgid "Third party services as youtube and google maps that use cookies..."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/controllers/element/third_party_optout/options.php:68
+msgid "Third Party can be enabled only for non admins."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/elements/dashboard/options.php:10
+msgid "This works only with the Youtube Block and Google Map Block, and it won't work if you add a youtube video or Google maps within an other Block (HTML Block for Eg.)."
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/elements/dashboard/options.php:12
+msgid "Title"
+msgstr ""
+
+#: packages/active_cookie_consent_third_party/elements/dashboard/options.php:16
+msgid "Description"
+msgstr ""

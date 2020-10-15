@@ -12,7 +12,7 @@ class GoogleMap {
         my.width = my.$element.data('width')
         my.height = my.$element.data('height')
         my.alt = my.$element.data('alt') || ''
-        my.buttonText = my.$element.data('buttonText') || 'Accept Third Party'
+        my.buttonText = my.$element.data('buttonText') || 'Please accept third party cookies'
         my.popupMessage = my.$element.data('popupMessage')
         my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
 

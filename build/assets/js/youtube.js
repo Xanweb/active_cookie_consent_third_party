@@ -4,7 +4,7 @@ class Youtube {
         my.$element = $element
         my.$iframe = my.$element.find('iframe')
         my.src = my.$iframe.data('src')
-        my.alt = my.$iframe.data('alt') || 'Accept Third Party'
+        my.alt = my.$iframe.data('alt') || 'Please accept third party cookies'
         my.active = my.$iframe.data('activate') || 0
         my.popupMessage = my.$iframe.data('popupMessage')
         my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
