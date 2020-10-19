@@ -8,18 +8,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2020-10-15T12:39:37+00:00\n"
-"PO-Revision-Date: 2020-10-15 16:28+0200\n"
+"PO-Revision-Date: 2020-10-19 08:51+0200\n"
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 2.4.1\n"
 
 #: packages/active_cookie_consent_third_party/controller.php:22
 msgid "Add Support for ThirdParty Cookie Control"
-msgstr ""
+msgstr "Drittanbieter Cookies Plugin"
 
 #: packages/active_cookie_consent_third_party/controller.php:27
 msgid "Third Party Cookie Consent"
-msgstr ""
+msgstr "Zustimmung für Drittanbieter cookies"
 
 #: packages/active_cookie_consent_third_party/blocks/google_map/view.php:31
 msgid "Please accept third party cookies"
@@ -27,19 +27,19 @@ msgstr "Bitte Drittanbieter Cookies akzeptieren"
 
 #: packages/active_cookie_consent_third_party/config/cookie_disclaimer.php:5
 msgid "Third party"
-msgstr ""
+msgstr "Drittanbieter"
 
 #: packages/active_cookie_consent_third_party/config/cookie_disclaimer.php:6
 msgid "Third party services as youtube and google maps that use cookies..."
-msgstr ""
+msgstr "Drittanbieter Dienste wie YouTube und Google Maps, nutzen Cookies…"
 
 #: packages/active_cookie_consent_third_party/controllers/element/third_party_optout/options.php:68
 msgid "Third Party can be enabled only for non admins."
-msgstr ""
+msgstr "Drittanbieter Plugin kann nur für nicht Administratoren aktiviert werden"
 
 #: packages/active_cookie_consent_third_party/elements/dashboard/options.php:10
 msgid "This works only with the Youtube Block and Google Map Block, and it won't work if you add a youtube video or Google maps within an other Block (HTML Block for Eg.)."
-msgstr ""
+msgstr "Dieses Plugin funktioniert nur mit dem YouTube Block und Google Map Block, wenn Sie ein Video oder Google Maps über einen anderen Block(HTML Block…) hinzufügen, werden die Cookies ohne Zustimmung des Benutzers gesetzt."
 
 #: packages/active_cookie_consent_third_party/elements/dashboard/options.php:12
 msgid "Title"

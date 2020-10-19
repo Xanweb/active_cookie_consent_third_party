@@ -1,1 +1,63 @@
-.googleMapCanvas{width:100%;border:0;height:400px;background-image:url(../img/google-map-wallpaper.png);background-size:cover}.googleMapCanvas .block-googlemap-overlay{background-color:rgba(0,0,0,.5);position:absolute;bottom:0;top:0;left:0;width:100%;display:flex;align-items:center;flex-wrap:wrap}.googleMapCanvas .block-googlemap-overlay .popup-message{width:55%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:hsla(0,0%,100%,.9);padding:20px 20px 30px;border-radius:20px}.googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup{transform:none;position:relative;left:unset;top:unset;border-radius:0;font-size:.875em}.googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup:active,.googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup:focus{outline:none}.googleMapCanvas img{max-width:none!important}
+.googleMapCanvas {
+  width: 100%;
+  border: 0 none;
+  height: 400px;
+  background-image: url("../img/google-map-wallpaper.png");
+  background-size: cover;
+}
+.googleMapCanvas .block-googlemap-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.googleMapCanvas .block-googlemap-overlay .popup-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 20px 30px 20px;
+  width: 100%;
+  border-radius: 0;
+}
+@media screen and (min-width: 992px) {
+  .googleMapCanvas .block-googlemap-overlay .popup-message {
+    width: 60%;
+  }
+}
+@media screen and (min-width: 580px) {
+  .googleMapCanvas .block-googlemap-overlay .popup-message {
+    width: 80%;
+    border-radius: 20px;
+  }
+}
+@media screen and (max-width: 580px) {
+  .googleMapCanvas .block-googlemap-overlay .popup-message h2 {
+    font-size: 26px !important;
+  }
+  .googleMapCanvas .block-googlemap-overlay .popup-message p {
+    line-height: 25px;
+    font-size: 0.875em;
+  }
+}
+.googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup {
+  transform: none;
+  position: relative;
+  left: unset;
+  top: unset;
+  border-radius: 0;
+  font-size: 0.875em;
+}
+.googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup:focus, .googleMapCanvas .block-googlemap-overlay .popup-message button.display-cookies-disclaimer-popup:active {
+  outline: none;
+}
+
+.googleMapCanvas img {
+  max-width: none !important;
+}
