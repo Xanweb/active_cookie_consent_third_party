@@ -3,7 +3,7 @@
   "type": "concrete5-package",
   "description": "Add Support for ThirdParty Cookie Control",
   "keywords": [
-    "Cookie Consent", "GoogleMaps", "Youtube", "Active Cookie Consent"
+    "Cookie Consent", "GoogleMaps", "Youtube", "Vimeo", "Active Cookie Consent"
   ],
   "license": "proprietary",
   "scripts": {
