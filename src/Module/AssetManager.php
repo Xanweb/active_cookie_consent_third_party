@@ -19,12 +19,15 @@ class AssetManager
                 ['css', 'css/google-map.css', ['minify' => false], $pkg],
                 ['javascript', 'js/google-map.js', ['minify' => false], $pkg],
             ],
+            'block/gorwthcurve-vimeo-video' => [
+              ['css', 'css/gorwthcurve-vimeo-video.css', ['minify' => false], $pkg],
+              ['javascript', 'js/gorwthcurve-vimeo-video.js', ['minify' => false], $pkg],
+            ],
         ]);
 
         $al->registerGroupMultiple([
             'block/youtube' => [
                 [
-                    ['vendor-javascript', 'js-cookie'],
                     ['javascript', 'acc/base'],
                     ['javascript', 'block/youtube'],
                     ['css', 'block/youtube'],
@@ -32,11 +35,17 @@ class AssetManager
             ],
             'block/google-map' => [
                 [
-                    ['vendor-javascript', 'js-cookie'],
                     ['javascript', 'acc/base'],
                     ['javascript', 'block/google-map'],
                     ['css', 'block/google-map'],
                 ],
+            ],
+            'block/gorwthcurve-vimeo-video' => [
+               [
+                   ['javascript', 'acc/base'],
+                   ['javascript', 'block/gorwthcurve-vimeo-video'],
+                   ['css', 'block/gorwthcurve-vimeo-video'],
+               ],
             ],
         ]);
     }
