@@ -11,7 +11,7 @@ class Controller extends Package implements ProviderInterface
 {
     protected $pkgHandle = 'active_cookie_consent_third_party';
     protected $appVersionRequired = '8.5.1';
-    protected $pkgVersion = '1.2.3';
+    protected $pkgVersion = '1.2.4';
     protected $pkgAutoloaderRegistries = [
         'src' => 'Concrete\Package\ActiveCookieConsentThirdParty',
     ];
