@@ -1,6 +1,10 @@
-.vimeoVidWrap button.display-cookies-disclaimer-popup {
+.vimeoVidWrap {
+  position: relative;
+
+  button.display-cookies-disclaimer-popup {
     z-index: 10;
     position: absolute;
     left: 45%;
     top: 45%;
+  }
 }
