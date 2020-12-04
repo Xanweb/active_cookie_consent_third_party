@@ -23,6 +23,9 @@ mix.sass('assets/sass/google-map.scss', 'css')
 mix.sass('assets/sass/youtube.scss', 'css')
     .js('assets/js/youtube.js', 'js')
 
+mix.sass('assets/sass/gorwthcurve-vimeo-video.scss', 'css')
+    .js('assets/js/gorwthcurve-vimeo-video.js', 'js')
+
 mix.disableNotifications()
 
 // Disable mix-manifest.json
