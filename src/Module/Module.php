@@ -2,11 +2,10 @@
 
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
-use Concrete\Core\Block\Events\BlockOutput;
 use Concrete\Core\Filesystem\Element;
 use Concrete\Core\Foundation\ClassAliasList;
-use Concrete\Core\View\View;
 use Concrete\Package\ActiveCookieConsent\Module\Module as AbstractModule;
+use Concrete\Package\ActiveCookieConsentThirdParty\Event\Subscriber;
 
 class Module extends AbstractModule
 {
@@ -28,20 +27,10 @@ class Module extends AbstractModule
     public static function boot()
     {
         $aliasList = ClassAliasList::getInstance();
-        $aliasList->registerMultiple(static::getClassAliases());
+        $aliasList->registerMultiple(self::getClassAliases());
 
-        if (!app('helper/concrete/dashboard')->canRead()) {
-            app('director')->addListener('on_block_output', function (BlockOutput $event) {
-                if ($event->getBlock()->getBlockTypeHandle() === 'growthcurve_vimeo_video') {
-                    $v = View::getInstance();
-                    $v->requireAsset('block/gorwthcurve-vimeo-video');
-
-                    $event->setContents(
-                        str_replace(['<iframe', 'src='], ['<iframe data-alt="' . t('Accept Third Party') . '"', 'data-src='], $event->getContents())
-                    );
-                }
-            });
-        }
+        $app = self::app();
+        $app->make('director')->addSubscriber($app->build(Subscriber::class));
 
         AssetManager::register();
     }

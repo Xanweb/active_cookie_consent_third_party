@@ -4,9 +4,9 @@ class GorwthcurveVimeoVideo {
         my.$element = $element
         my.$iframe = my.$element.find('iframe')
         my.src = my.$iframe.data('src')
-        my.alt = my.$iframe.data('alt') || 'Accept Third Party'
+        my.buttonText = my.$element.data('buttonText') || 'Please accept third party cookies'
 
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
+        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
         if (!my.isAccepted()) {
             my.blockVideo()
             my.active = false

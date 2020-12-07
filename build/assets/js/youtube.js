@@ -4,11 +4,11 @@ class Youtube {
         my.$element = $element
         my.$iframe = my.$element.find('iframe')
         my.src = my.$iframe.data('src')
-        my.alt = my.$iframe.data('alt') || 'Please accept third party cookies'
-        my.active = my.$iframe.data('activate') || 0
+        my.buttonText = my.$element.data('buttonText') || 'Please accept third party cookies'
         my.popupMessage = my.$iframe.data('popupMessage')
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
-        my.blockYoutubeTemplate = '<div class="block-youtube-overlay"><div class="popup-message">'+ my.popupMessage +my.buttonTemplate+'</div></div>'
+
+        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
+        my.blockYoutubeTemplate = '<div class="block-youtube-overlay"><div class="popup-message">'+ my.popupMessage + my.buttonTemplate + '</div></div>'
 
         if (!my.active) {
             my.blockVideo()
