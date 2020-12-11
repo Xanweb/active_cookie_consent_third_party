@@ -4,9 +4,13 @@ class GorwthcurveVimeoVideo {
         my.$element = $element
         my.$iframe = my.$element.find('iframe')
         my.src = my.$iframe.data('src')
-        my.buttonText = my.$element.data('buttonText') || 'Please accept third party cookies'
+        my.buttonText = my.$iframe.data('buttonText') || 'Please accept third party cookies'
+        my.buttonFunction = my.$iframe.data('acceptFunction') || 'show_popup'
+        my.popupMessage = my.$iframe.data('popupMessage')
 
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
+        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="'+my.buttonFunction+'">' + my.buttonText + '</button>'
+        my.blockVimeoTemplate = '<div class="block-vimeo-overlay"><div class="popup-message">'+ my.popupMessage + my.buttonTemplate + '</div></div>'
+
         if (!my.isAccepted()) {
             my.blockVideo()
             my.active = false
@@ -53,12 +57,12 @@ class GorwthcurveVimeoVideo {
 
     showVideo() {
         this.$iframe.prop('src', this.src)
-        this.$element.find('button.display-cookies-disclaimer-popup').remove()
+        this.$element.find('.blockVimeoTemplate').remove()
         this.$element.find('.vvResponsive').fitVids()
     }
 
     blockVideo() {
-        this.$element.append(this.buttonTemplate)
+        this.$element.append(this.blockVimeoTemplate)
     }
 }
 

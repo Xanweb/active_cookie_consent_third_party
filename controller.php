@@ -36,13 +36,17 @@ class Controller extends Package implements ProviderInterface
     {
         $pkg = parent::install();
 
-        $this->overrideBlocksByPackage($pkg);
-
         $config = $this->getConfig();
         $config->save('youtube.enabled', 1);
         $config->save('gmap.enabled', 1);
 
         return $pkg;
+    }
+
+    public function upgrade()
+    {
+        parent::upgrade();
+        $this->restoreOverriddenBlocks();
     }
 
     public function testForUpgrade()
@@ -79,20 +83,6 @@ class Controller extends Package implements ProviderInterface
     public function getDrivers()
     {
         return [];
-    }
-
-    /**
-     * Override Block By Package.
-     *
-     * @param \Concrete\Core\Entity\Package $pkg
-     */
-    private function overrideBlocksByPackage($pkg)
-    {
-        foreach ($this->blocksOverride as $btHandle) {
-            $blockYoutube = BlockType::getByHandle($btHandle);
-            $blockYoutube->setPackageID($pkg->getPackageID());
-            $blockYoutube->refresh();
-        }
     }
 
     /**

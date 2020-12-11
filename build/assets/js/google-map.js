@@ -11,9 +11,10 @@ class GoogleMap {
         my.latlng = new window.google.maps.LatLng(my.latitude, my.longitude)
         my.width = my.$element.data('width')
         my.height = my.$element.data('height')
-        my.buttonText = my.$element.data('buttonText') || 'Please accept third party cookies'
-        my.popupMessage = my.$element.data('popupMessage')
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.buttonText + '</button>'
+        my.buttonText = my.$iframe.data('buttonText') || 'Please accept third party cookies'
+        my.buttonFunction = my.$iframe.data('acceptFunction') || 'show_popup'
+        my.popupMessage = my.$iframe.data('popupMessage')
+        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="' + my.buttonFunction + '">' + my.buttonText + '</button>'
 
         my.mapOptions = {
             zoom: my.zoom,
@@ -26,7 +27,7 @@ class GoogleMap {
         }
 
         my.active = my.$element.data('active') || false
-        my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: '+ my.height +';"><div class="block-googlemap-overlay"><div class="popup-message">'+ my.popupMessage +my.buttonTemplate+'</div></div></div>'
+        my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: ' + my.height + ';"><div class="block-googlemap-overlay"><div class="popup-message">' + my.popupMessage + my.buttonTemplate + '</div></div></div>'
         if (!my.active) {
             my.blockGoogleMap()
         } else {
