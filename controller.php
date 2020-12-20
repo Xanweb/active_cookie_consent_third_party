@@ -11,18 +11,15 @@ class Controller extends Package implements ProviderInterface
 {
     protected $pkgHandle = 'active_cookie_consent_third_party';
     protected $appVersionRequired = '8.5.1';
-    protected $pkgVersion = '1.3.0';
+    protected $pkgVersion = '1.3.0RC1';
+    protected $packageDependencies = ['active_cookie_consent' => '1.3.0RC1'];
 
-    protected $packageDependencies = ['active_cookie_consent' => '1.1'];
-
-    private $blocksOverride = ['youtube', 'google_map'];
-
-    public function getPackageDescription()
+    public function getPackageDescription(): string
     {
         return t('Add Support for ThirdParty Cookie Control');
     }
 
-    public function getPackageName()
+    public function getPackageName(): string
     {
         return t('Third Party Cookie Consent');
     }
@@ -36,8 +33,6 @@ class Controller extends Package implements ProviderInterface
     {
         $pkg = parent::install();
 
-        $this->overrideBlocksByPackage($pkg);
-
         $config = $this->getConfig();
         $config->save('youtube.enabled', 1);
         $config->save('gmap.enabled', 1);
@@ -48,16 +43,8 @@ class Controller extends Package implements ProviderInterface
     public function upgrade()
     {
         parent::upgrade();
+
         $this->restoreOverriddenBlocks();
-    }
-
-    public function testForUpgrade()
-    {
-        if (Module::isSubModuleInstalled('third_party')) {
-            $this->packageDependencies = ['active_cookie_consent' => '1.3.0'];
-        }
-
-        return parent::testForUpgrade();
     }
 
     public function uninstall()
@@ -72,7 +59,7 @@ class Controller extends Package implements ProviderInterface
      */
     public function getPackageAutoloaderRegistries(): array
     {
-        if (!class_exists('Concrete\Package\ActiveCookieConsentThirdParty\Module\Module')) {
+        if (!class_exists(Module::class)) {
             return ['src' => 'Concrete\Package\ActiveCookieConsentThirdParty'];
         }
 
@@ -82,34 +69,20 @@ class Controller extends Package implements ProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getDrivers()
+    public function getDrivers(): array
     {
         return [];
     }
 
     /**
-     * Override Block By Package.
-     *
-     * @param \Concrete\Core\Entity\Package $pkg
-     */
-    private function overrideBlocksByPackage($pkg)
-    {
-        foreach ($this->blocksOverride as $btHandle) {
-            $blockYoutube = BlockType::getByHandle($btHandle);
-            $blockYoutube->setPackageID($pkg->getPackageID());
-            $blockYoutube->refresh();
-        }
-    }
-
-    /**
      * Restore Overridden Blocks.
      */
-    private function restoreOverriddenBlocks()
+    private function restoreOverriddenBlocks(): void
     {
-        foreach ($this->blocksOverride as $btHandle) {
-            $blockYoutube = BlockType::getByHandle($btHandle);
-            $blockYoutube->setPackageID(0);
-            $blockYoutube->refresh();
+        foreach (['youtube', 'google_map'] as $btHandle) {
+            $bt = BlockType::getByHandle($btHandle);
+            $bt->setPackageID(0);
+            $bt->refresh();
         }
     }
 }

@@ -1,96 +1,25 @@
-class GoogleMap {
-    constructor(element) {
-        const my = this
-        my.element = element
-        my.$element = $(element)
-        my.latitude = my.$element.data('latitude')
-        my.longitude = my.$element.data('longitude')
-        my.zoom = my.$element.data('zoom')
-        my.scrollwheel = my.$element.data('scrollwheel')
-        my.draggable = my.$element.data('draggable')
-        my.latlng = new window.google.maps.LatLng(my.latitude, my.longitude)
-        my.width = my.$element.data('width')
-        my.height = my.$element.data('height')
-        my.buttonText = my.$iframe.data('buttonText') || 'Please accept third party cookies'
-        my.buttonFunction = my.$iframe.data('acceptFunction') || 'show_popup'
-        my.popupMessage = my.$iframe.data('popupMessage')
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="' + my.buttonFunction + '">' + my.buttonText + '</button>'
+import Config from './config'
+import ThirdParty from './third-party'
 
-        my.mapOptions = {
-            zoom: my.zoom,
-            center: my.latlng,
-            mapTypeId: window.google.maps.MapTypeId.ROADMAP,
-            streetViewControl: false,
-            scrollwheel: my.scrollwheel,
-            draggable: my.draggable,
-            mapTypeControl: false
-        }
+const gmapSelector = '.googleMapCanvas'
 
-        my.active = my.$element.data('active') || false
-        my.blockGoogleMapTemplate = '<div class="block-google-map-template" style="width: ' + my.width + ';height: ' + my.height + ';"><div class="block-googlemap-overlay"><div class="popup-message">' + my.popupMessage + my.buttonTemplate + '</div></div></div>'
-        if (!my.active) {
-            my.blockGoogleMap()
-        } else {
-            my.showGoogleMap()
-        }
+export default class GoogleMap extends ThirdParty {
 
-        window.ACC.registerThirdParty(this)
-    }
+    display() {
+        const $gmapScriptTag = $(document.head).find('script[data-src*="maps.googleapis.com/maps/api/js"]')
+        $gmapScriptTag.attr('src', $gmapScriptTag.attr('data-src'))
 
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     *
-     * @returns {boolean}
-     */
-    isEnabled() {
-        return this.active
-    }
-
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    enable() {
-        if (!this.active) {
-            this.showGoogleMap()
-            this.active = true
-        }
-    }
-
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    disable() {
-        if (this.active) {
-            this.blockGoogleMap()
-            this.active = false
-        }
-    }
-
-    isAccepted() {
-        return !window.ACC.UserPrivacy.isOptedOut('thirdParty')
-    }
-
-    showGoogleMap() {
-        const my = this
-        try {
-            const map = new window.google.maps.Map(my.element, my.mapOptions)
-            new window.google.maps.Marker({
-                position: my.latlng,
-                map: map
+        $(gmapSelector).each(function () {
+            $(this).find('div.block-google-map-template').fadeOut(300, function() {
+                $(this).remove()
             })
-        } catch (e) {
-            my.$element.replaceWith($('<p />').text(e.message))
-        }
+        })
     }
 
-    blockGoogleMap() {
-        const my = this
-        my.$element.append(my.blockGoogleMapTemplate)
+    block() {
+        $(gmapSelector).each(function () {
+            const $self = $(this)
+            $self.append(`<div class="block-google-map-template" style="width: ${$self.data('width')};height: ${$self.data('height')};">${Config.getOverlayHTML()}</div>`)
+        })
     }
-}
-
-window.concreteGoogleMapInit = () => {
-    $('.googleMapCanvas').each(function () {
-        new GoogleMap(this)
-    })
 }

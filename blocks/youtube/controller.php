@@ -6,5 +6,4 @@ use Concrete\Block\Youtube\Controller as CoreController;
 
 class Controller extends CoreController
 {
-
 }

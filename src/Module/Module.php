@@ -2,6 +2,7 @@
 
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
+use Concrete\Core\Block\Block;
 use Concrete\Core\Filesystem\Element;
 use Concrete\Core\Foundation\ClassAliasList;
 use Concrete\Package\ActiveCookieConsent\Module\Module as AbstractModule;
@@ -30,7 +31,9 @@ class Module extends AbstractModule
         $aliasList->registerMultiple(self::getClassAliases());
 
         $app = self::app();
-        $app->make('director')->addSubscriber($app->build(Subscriber::class));
+        if (!$app['helper/concrete/dashboard']->canRead()) {
+            $app['director']->addSubscriber($app->build(Subscriber::class));
+        }
 
         AssetManager::register();
     }
@@ -40,7 +43,7 @@ class Module extends AbstractModule
      *
      * @return Element
      */
-    public static function getDashboardOptionsElement($siteTree)
+    public static function getDashboardOptionsElement($siteTree): Element
     {
         return new Element('dashboard/options', self::pkgHandle(), ['siteTree' => $siteTree]);
     }
@@ -50,8 +53,17 @@ class Module extends AbstractModule
      *
      * @return Element
      */
-    public static function getOptoutOptionsElement($siteTree)
+    public static function getOptoutOptionsElement($siteTree): Element
     {
         return new Element('third_party_optout/options', self::pkgHandle(), ['siteTree' => $siteTree]);
+    }
+
+    public static function supports(Block $block): bool
+    {
+        return in_array(
+            $block->getBlockTypeHandle(),
+            ['youtube', 'growthcurve_vimeo_video', 'google_map'],
+            true
+        );
     }
 }

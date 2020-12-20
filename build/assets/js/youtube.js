@@ -1,78 +1,21 @@
-class Youtube {
-    constructor($element, options) {
-        const my = this
-        my.$element = $element
-        my.$iframe = my.$element.find('iframe')
-        my.src = my.$iframe.data('src')
-        my.buttonText = my.$iframe.data('buttonText') || 'Please accept third party cookies'
-        my.buttonFunction = my.$iframe.data('acceptFunction') || 'show_popup'
-        my.popupMessage = my.$iframe.data('popupMessage')
+import Config from './config'
+import ThirdParty from './third-party'
 
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="'+my.buttonFunction+'">' + my.buttonText + '</button>'
-        my.blockYoutubeTemplate = '<div class="block-youtube-overlay"><div class="popup-message">'+ my.popupMessage + my.buttonTemplate + '</div></div>'
+const youtubeSelector = 'div.youtubeBlock'
 
-        if (!my.active) {
-            my.blockVideo()
-        } else {
-            my.showVideo()
-        }
+export default class Youtube extends ThirdParty {
 
-        window.ACC.registerThirdParty(this)
+    display() {
+        $(youtubeSelector).each(function () {
+            const $self = $(this)
+            const $iframe = $self.find('iframe')
+            $iframe.attr('src', $iframe.attr('data-src'))
+
+            $self.find(`.${Config.overlayClass}`).remove()
+        })
     }
 
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     *
-     * @returns {boolean}
-     */
-    isEnabled() {
-        return this.active
-    }
-
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    enable() {
-        if (!this.active) {
-            this.showVideo()
-            this.active = true
-        }
-    }
-
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    disable() {
-        if (this.active) {
-            this.blockVideo()
-            this.active = false
-        }
-    }
-
-    isAccepted() {
-        return !window.ACC.UserPrivacy.isOptedOut('thirdParty')
-    }
-
-    showVideo() {
-        this.$iframe.prop('src', this.src)
-        this.$element.find('.blockYoutubeTemplate').remove()
-    }
-
-    blockVideo() {
-        this.$element.append(this.blockYoutubeTemplate)
+    block() {
+        $(youtubeSelector).append(Config.getOverlayHTML())
     }
 }
-
-$.fn.xwACCYoutube = function(options) {
-    return $.each($(this), function(i, obj) {
-        new Youtube($(this), options)
-    })
-}
-
-// Setup AutoStart
-$(function () {
-    const youtubePlayer = $('div.youtubeBlock')
-    if (youtubePlayer.length > 0) {
-        youtubePlayer.xwACCYoutube()
-    }
-})

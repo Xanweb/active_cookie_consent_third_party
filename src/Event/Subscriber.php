@@ -7,15 +7,10 @@ use Concrete\Core\Application\ApplicationAwareTrait;
 use Concrete\Core\Asset\CssInlineAsset;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Block\Events\BlockOutput;
-use Concrete\Core\File\File;
-use Concrete\Core\Page\Page;
-use Concrete\Core\Support\Facade\Application;
-use Concrete\Core\View\View;
-use Concrete\Package\ActiveCookieConsent\Entity\CookieDisclaimerSetting as CookieDisclaimerSettingEntity;
-use Concrete\Package\ActiveCookieConsent\Service\Entity\CookieDisclaimerSetting as CookieSettingSVC;
-use Concrete\Package\ActiveCookieConsent\Module\Module as ActiveCookieConsentModule;
-use Concrete\Package\ActiveCookieConsent\Service\Entity\ThirdPartySetting as ThirdPartySettingSVC;
 use Concrete\Package\ActiveCookieConsent\Entity\ThirdPartySetting as ThirdPartySettingEntity;
+use Concrete\Package\ActiveCookieConsent\Service\Entity\CookieDisclaimerSetting as CookieSettingSVC;
+use Concrete\Package\ActiveCookieConsent\Service\Entity\ThirdPartySetting as ThirdPartySettingSVC;
+use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -24,26 +19,35 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
     use ApplicationAwareTrait;
 
     /**
+     * Inline styles to render for Third Party usage.
+     *
+     * @var array
+     */
+    private $inlineStyles = [];
+
+    /**
      * @var CookieSettingSVC
      */
-    private $cookieSetting;
+    private $blocksSettings = [];
 
     /**
      * {@inheritdoc}
      */
     public static function getSubscribedEvents(): array
     {
-        $app = Application::getFacadeApplication();
-        if (!$app['helper/concrete/dashboard']->canRead()) {
-            return [
-                'on_block_load' => ['youtubeForceNoCookie'],
-                'on_block_output' => [['youtubeOptOut'], ['vimeoOptOut'], ['gmapOptOut']],
-            ];
-        }
-
-        return [];
+        return [
+            'on_block_load' => ['youtubeForceNoCookie'],
+            'on_block_output' => ['thirdPartiesOptOut'],
+            'on_before_render' => ['registerAssets'],
+            'on_page_output' => ['googleMapOptOut'],
+        ];
     }
 
+    /**
+     * @eventName on_block_load
+     *
+     * @param GenericEvent $event
+     */
     public function youtubeForceNoCookie(GenericEvent $event): void
     {
         if ($event->getArgument('btHandle') !== 'youtube') {
@@ -58,175 +62,121 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         }
     }
 
-    public function youtubeOptOut(BlockOutput $event): void
+    /**
+     * @eventName on_before_render
+     *
+     * @param GenericEvent $event
+     */
+    public function registerAssets(GenericEvent $event): void
+    {
+        $view = $event->getArgument('view');
+        $view->requireAsset('acc/third-party');
+
+        if ($this->inlineStyles !== []) {
+            $inlineCssAsset = new CssInlineAsset();
+            $inlineCssAsset->setAssetURL(implode(PHP_EOL, $this->inlineStyles));
+            $view->requireAsset($inlineCssAsset);
+        }
+    }
+
+    /**
+     * @eventName on_block_output
+     *
+     * @param BlockOutput $event
+     */
+    public function thirdPartiesOptOut(BlockOutput $event): void
     {
         $block = $event->getBlock();
-        $blockTypeHandle = $block->getBlockTypeHandle();
-        if ($blockTypeHandle !== 'youtube') {
+        if ($block === null || !Module::supports($block)) {
             return;
         }
 
+        // Wrap Content in ACC Container
+        $event->setContents(
+            '<div class="acc-third-party-wrapper acc-' . $block->getBlockTypeHandle() . '-wrapper acc-third-party-wrapper-' . $block->getBlockID() . '">'
+            . $event->getContents()
+            . '</div>'
+        );
 
-        $v = View::getInstance();
-        $v->requireAsset('block/youtube');
-
-        $event->setContents(str_replace(
-            ['<iframe', 'src=', '</iframe>'],
-            ['<div class="custom-player-wrapper custom-wrapper-' . $block->getBlockID() . '"><iframe data-popup-message="' . $this->getPopupMessageDisplay() . '" data-button-text="' . $this->getButtonText() . '" data-accept-function="' .$this->getAcceptThirdPartyFunction().'"', 'data-src=', '</iframe></div>'],
+        // Prevent iframe from loading content
+        $event->setContents(preg_replace(
+            '/<iframe(.*) src="(.*)"/',
+            '<iframe$1 data-src="$2"',
             $event->getContents()
         ));
 
-        $this->addBlockHeaderStyle($block, $v);
+        $this->setupCustomizedBackground($block);
     }
 
-    public function vimeoOptOut(BlockOutput $event): void
+    /**
+     * @eventName on_page_output
+     *
+     * @param GenericEvent $event
+     */
+    public function googleMapOptOut(GenericEvent $event): void
     {
-        $block = $event->getBlock();
-        $blockTypeHandle = $block->getBlockTypeHandle();
-
-        if ($blockTypeHandle !== 'growthcurve_vimeo_video') {
-            return;
-        }
-
-        $v = View::getInstance();
-        $v->requireAsset('block/gorwthcurve-vimeo-video');
-
-        $event->setContents(str_replace(
-            ['<iframe', 'src=', '</iframe>'],
-            ['<div class="custom-player-wrapper custom-wrapper-' . $block->getBlockID() . '"><iframe data-popup-message="' . $this->getPopupMessageDisplay() . '" data-button-text="' . $this->getButtonText() . '" data-accept-function="' .$this->getAcceptThirdPartyFunction().'"', 'data-src=', '</iframe></div>'],
-            $event->getContents()
-        ));
-        $this->addBlockHeaderStyle($block, $v);
-
-    }
-
-    public function gmapOptOut(BlockOutput $event): void
-    {
-        if ($event->getBlock()->getBlockTypeHandle() !== 'google_map') {
-            return;
-        }
-
-        $v = View::getInstance();
-        $v->requireAsset('block/google-map');
-
-        $event->setContents(str_replace(
-            '<div class="googleMapCanvas',
-            '<div data-popup-message="' . $this->getPopupMessageDisplay() . '" data-button-text="' . $this->getButtonText() . '" data-accept-function="' .$this->getAcceptThirdPartyFunction().'" class="googleMapCanvas',
-            $event->getContents()
+        $event->setArgument('contents', preg_replace(
+            '#<script(.*) src="(.*)maps.googleapis.com/maps/api/js#',
+            '<script$1 data-src="$2maps.googleapis.com/maps/api/js',
+            $event->getArgument('contents')
         ));
     }
 
-    protected function getButtonText(): string
+    protected function getThirdPartySettings(string $btHandle): ?ThirdPartySettingEntity
     {
-        return t('Please accept third party cookies');
-    }
-
-    protected function getPopupMessageDisplay(): string
-    {
-        $cookieSetting = $this->getCookieSettings();
-
-        $msgDisplay = ($cookieSetting !== null)
-            ? (string)$cookieSetting->getPopupMessageDisplay()
-            : ActiveCookieConsentModule::getFileConfig()->get('popup_message', '');
-
-        return h($msgDisplay);
-    }
-
-    protected function getAcceptThirdPartyFunction(): string
-    {
-        $cookieSetting = $this->getCookieSettings();
-
-        $btnFunction = ($cookieSetting !== null)
-            ? $cookieSetting->getBtnTPAcceptFunction()
-            : 'accept_third_party';
-
-        return $btnFunction;
-    }
-
-    protected function getCookieSettings(): ?CookieDisclaimerSettingEntity
-    {
-        if (!$this->cookieSetting) {
-            $c = Page::getCurrentPage();
-            if ($c !== null) {
-                $siteTree = $c->getSiteTreeObject();
-            } else {
-                $siteTree = $this->app['site']->getSite()->getSiteTreeObject();
-            }
-
-            $cookieSettingSVC = $this->app->make(CookieSettingSVC::class);
-            $this->cookieSetting = is_object($siteTree) ? $cookieSettingSVC->getOrCreateByTree($siteTree) : null;
-        }
-
-        return $this->cookieSetting;
-    }
-
-    protected function getThirdPartySettings($blockTypeHandle): ?ThirdPartySettingEntity
-    {
-        $c = Page::getCurrentPage();
-        if ($c !== null) {
-            $site = $c->getSite();
-        } else {
+        if (!array_key_exists($btHandle, $this->blocksSettings)) {
             $site = $this->app['site']->getSite();
+            $thirdPartySettingSVC = $this->app->make(ThirdPartySettingSVC::class);
+            $this->blocksSettings[$btHandle] = is_object($site) ? $thirdPartySettingSVC->getOrCreateByHandleAndSite($btHandle, $site) : null;
         }
 
-        $thirdPartySettingSVC = $this->app->make(ThirdPartySettingSVC::class);
-        $thirdPartySetting = is_object($site) ? $thirdPartySettingSVC->getOrCreateByHandleAndSite($blockTypeHandle, $site) : null;
-
-        return $thirdPartySetting;
+        return $this->blocksSettings[$btHandle];
     }
 
-    protected function addBlockHeaderStyle(Block $block, View $v)
+    protected function setupCustomizedBackground(Block $block): void
     {
-        $blockTypeHandle = $block->getBlockTypeHandle();
-        $blockID = $block->getBlockID();
-        $settings = $this->getThirdPartySettings($blockTypeHandle);
-        if ($settings->isDefaultThumbnailUsed()) {
-            $thumbnailURL = $this->getThumbnailFromAPI($block);
-        } else {
-            $thID = $settings->getCustomThumbnailfID();
-            $thumbnailURL = ($thID != 0) ? File::getRelativePathFromID($settings->getCustomThumbnailfID()) : '';
+        // Check if it's already set
+        if (isset($this->inlineStyles[$bID = $block->getBlockID()])) {
+            return;
         }
 
-        $css = ".custom-wrapper-{$blockID} iframe {background-image: url('$thumbnailURL'); }";
-        $inlineCssAsset = new CssInlineAsset();
-        $inlineCssAsset->setAssetURL($css);
-        $v->requireAsset($inlineCssAsset);
-
+        $settings = $this->getThirdPartySettings($block->getBlockTypeHandle());
+        if ($settings !== null && $settings->isDefaultThumbnailUsed()
+            && !empty($thumbnailURL = $this->getThumbnailFromAPI($block))) {
+            $this->inlineStyles[$bID] = "div.ccm-page .acc-third-party-wrapper-{$bID} iframe { background-image: url('$thumbnailURL'); }";
+        }
     }
 
-    protected function getThumbnailFromAPI(Block $block)
+    protected function getThumbnailFromAPI(Block $block): string
     {
-        $blockTypeHandle = $block->getBlockTypeHandle();
+        $btHandle = $block->getBlockTypeHandle();
         $videoThumbnail = '';
-        if ($blockTypeHandle == 'youtube') {
-            $url = parse_url($block->getController()->videoURL);
+        if ($btHandle === 'youtube' && !empty($videoURL = $block->getController()->videoURL)) {
+            $url = parse_url($videoURL);
             $pathParts = explode('/', rtrim($url['path'], '/'));
             parse_str($url['query'], $params);
-            $blockVideoId = end($pathParts);
+            $videoID = end($pathParts);
 
             if (isset($url['query'])) {
                 parse_str($url['query'], $query);
 
                 if (isset($query['list'])) {
-                    $blockVideoId = '';
+                    $videoID = '';
                 } else {
-                    $blockVideoId = isset($query['v']) ? $query['v'] : $blockVideoId;
-                    $blockVideoId = strtok($blockVideoId, '?');
+                    $videoID = $query['v'] ?? $videoID;
+                    $videoID = strtok($videoID, '?');
                 }
             }
-            if ($blockVideoId != '') {
-                $videoThumbnail = "https://img.youtube.com/vi/{$blockVideoId}/maxresdefault.jpg";
+
+            if (!empty($videoID)) {
+                $videoThumbnail = "//img.youtube.com/vi/{$videoID}/hqdefault.jpg";
             }
-        } else if ($blockTypeHandle == 'growthcurve_vimeo_video') {
-            $blockVideoId = $block->getController()->get('vimeoVid');
-            if ($blockVideoId != '' && $blockVideoId != 0) {
-                $data = file_get_contents("http://vimeo.com/api/v2/video/$blockVideoId.json");
-                $data = json_decode($data);
-                $videoThumbnail = $data[0]->thumbnail_large;
-            }
+        } elseif ($btHandle === 'growthcurve_vimeo_video' && !empty($blockVideoId = $block->getController()->get('vimeoVid'))) {
+            $data = @file_get_contents("//vimeo.com/api/v2/video/$blockVideoId.json");
+            $data = @json_decode($data, true);
+            $videoThumbnail = $data[0]['thumbnail_large'] ?? $data[0]['thumbnail_medium'] ?? $data[0]['thumbnail_small'] ?? '';
         }
 
         return $videoThumbnail;
     }
-
 }
