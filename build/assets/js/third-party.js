@@ -8,12 +8,12 @@ export default class ThirdParty {
 
         my.init()
 
-        if (!ThirdParty.isAccepted()) {
+        if (ThirdParty.isAccepted()) {
             my.display()
-            my.active = false
-        } else {
-            my.show()
             my.active = true
+        } else {
+            my.block()
+            my.active = false
         }
     }
 
