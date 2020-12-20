@@ -21,5 +21,10 @@
   },
   "support": {
     "source": "https://github.com/Xanweb/active_cookie_consent_third_party"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-develop": "1.x-dev"
+    }
   }
 }
