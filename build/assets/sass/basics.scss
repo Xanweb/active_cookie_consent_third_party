@@ -16,7 +16,7 @@
   transition: opacity 150ms ease-in-out;
   background-color: rgba(0, 0, 0, .75);
   @supports (backdrop-filter: none) {
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(9px);
   }
 
   position: absolute;

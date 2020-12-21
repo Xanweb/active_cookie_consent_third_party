@@ -11,8 +11,9 @@ export default class GoogleMap extends ThirdParty {
     }
 
     display() {
-        const $gmapScriptTag = $(document.head).find('script[data-src*="maps.googleapis.com/maps/api/js"]')
-        $gmapScriptTag.attr('src', $gmapScriptTag.attr('data-src'))
+        $('script[data-src*="maps.googleapis.com/maps/api/js"]').each(function() {
+            $(this).attr('src', $(this).attr('data-src'))
+        })
 
         super.display()
     }

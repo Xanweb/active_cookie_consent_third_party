@@ -7,6 +7,7 @@ use Concrete\Core\Application\ApplicationAwareTrait;
 use Concrete\Core\Asset\CssInlineAsset;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Block\Events\BlockOutput;
+use Concrete\Core\Http\ResponseAssetGroup;
 use Concrete\Package\ActiveCookieConsent\Entity\ThirdPartySetting as ThirdPartySettingEntity;
 use Concrete\Package\ActiveCookieConsent\Service\Entity\ThirdPartySetting as ThirdPartySettingSVC;
 use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
@@ -28,6 +29,11 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
      * @var ThirdPartySettingEntity[]
      */
     private $blocksSettings = [];
+
+    /**
+     * @var CssInlineAsset
+     */
+    private $cssInlineAsset;
 
     /**
      * {@inheritdoc}
@@ -70,12 +76,6 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
     {
         $view = $event->getArgument('view');
         $view->requireAsset('acc/third-party');
-
-        if ($this->inlineStyles !== []) {
-            $inlineCssAsset = new CssInlineAsset();
-            $inlineCssAsset->setAssetURL(implode(PHP_EOL, $this->inlineStyles));
-            $view->requireAsset($inlineCssAsset);
-        }
     }
 
     /**
@@ -143,6 +143,13 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         if ($settings !== null && $settings->isDefaultThumbnailUsed()
             && !empty($thumbnailURL = $this->getThumbnailFromAPI($block))) {
             $this->inlineStyles[$bID] = "div.ccm-page .acc-{$block->getBlockTypeHandle()}.acc-third-party-{$bID}.acc-opt-out { background-image: url('$thumbnailURL'); }";
+            if ($this->cssInlineAsset === null) {
+                $r = ResponseAssetGroup::get();
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $r->requireAsset($this->cssInlineAsset = new CssInlineAsset());
+            }
+
+            $this->cssInlineAsset->setAssetURL(implode(PHP_EOL, $this->inlineStyles));
         }
     }
 
