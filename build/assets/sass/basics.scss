@@ -1,11 +1,24 @@
 .acc-third-party-wrapper {
-  iframe {
-    background-size: cover;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &.acc-opt-out {
+    position: relative;
+
+    .acc-block-overlay {
+      opacity: 1;
+    }
   }
 }
 
 .acc-block-overlay {
-  background-color: rgba(0, 0, 0, .5);
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  background-color: rgba(0, 0, 0, .75);
+  @supports (backdrop-filter: none) {
+    backdrop-filter: blur(3px);
+  }
+
   position: absolute;
   bottom: 0;
   top: 0;

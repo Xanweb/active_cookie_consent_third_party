@@ -1,21 +1,21 @@
-import Config from './config'
 import ThirdParty from './third-party'
-
-const youtubeSelector = 'div.youtubeBlock'
 
 export default class Youtube extends ThirdParty {
 
-    display() {
-        $(youtubeSelector).each(function () {
-            const $self = $(this)
-            const $iframe = $self.find('iframe')
-            $iframe.attr('src', $iframe.attr('data-src'))
-
-            $self.find(`.${Config.overlayClass}`).remove()
-        })
+    /**
+     * @return {string}
+     * @protected
+     */
+    get wrapperSelector() {
+        return `${super.wrapperSelector}.acc-youtube`
     }
 
-    block() {
-        $(youtubeSelector).append(Config.getOverlayHTML())
+    display() {
+        $(this.wrapperSelector).each(function () {
+            const $iframe = $(this).find('iframe')
+            $iframe.attr('src', $iframe.attr('data-src'))
+        })
+
+        super.display()
     }
 }

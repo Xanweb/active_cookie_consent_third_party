@@ -1,3 +1,5 @@
-@import "basics";
-@import "google-map";
-@import "gorwthcurve-vimeo-video";
+div.ccm-page {
+  @import "basics";
+  @import "google-map";
+  @import "gorwthcurve-vimeo-video";
+}

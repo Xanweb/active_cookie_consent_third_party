@@ -1,3 +1,5 @@
+import Config from './config'
+
 export default class ThirdParty {
 
     constructor() {
@@ -19,6 +21,14 @@ export default class ThirdParty {
 
     init() {
 
+    }
+
+    /**
+     * @return {string}
+     * @protected
+     */
+    get wrapperSelector() {
+        return '.acc-third-party-wrapper'
     }
 
     /**
@@ -55,10 +65,16 @@ export default class ThirdParty {
     }
 
     display() {
-        throw new TypeError('Please implement abstract method display().')
+        $(this.wrapperSelector)
+            .removeClass('acc-opt-out')
+            .addClass('acc-opt-in')
+            .find(`.${Config.overlayClass}`).remove()
     }
 
     block() {
-        throw new TypeError('Please implement abstract method block().')
+        $(this.wrapperSelector)
+            .append(Config.getOverlayHTML())
+            .addClass('acc-opt-out')
+            .removeClass('acc-opt-in')
     }
 }

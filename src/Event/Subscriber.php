@@ -8,7 +8,6 @@ use Concrete\Core\Asset\CssInlineAsset;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Block\Events\BlockOutput;
 use Concrete\Package\ActiveCookieConsent\Entity\ThirdPartySetting as ThirdPartySettingEntity;
-use Concrete\Package\ActiveCookieConsent\Service\Entity\CookieDisclaimerSetting as CookieSettingSVC;
 use Concrete\Package\ActiveCookieConsent\Service\Entity\ThirdPartySetting as ThirdPartySettingSVC;
 use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,12 +20,12 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
     /**
      * Inline styles to render for Third Party usage.
      *
-     * @var array
+     * @var string[]
      */
     private $inlineStyles = [];
 
     /**
-     * @var CookieSettingSVC
+     * @var ThirdPartySettingEntity[]
      */
     private $blocksSettings = [];
 
@@ -93,7 +92,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
 
         // Wrap Content in ACC Container
         $event->setContents(
-            '<div class="acc-third-party-wrapper acc-' . $block->getBlockTypeHandle() . '-wrapper acc-third-party-wrapper-' . $block->getBlockID() . '">'
+            '<div class="acc-third-party-wrapper acc-' . $block->getBlockTypeHandle() . ' acc-third-party-' . $block->getBlockID() . '">'
             . $event->getContents()
             . '</div>'
         );
@@ -143,7 +142,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         $settings = $this->getThirdPartySettings($block->getBlockTypeHandle());
         if ($settings !== null && $settings->isDefaultThumbnailUsed()
             && !empty($thumbnailURL = $this->getThumbnailFromAPI($block))) {
-            $this->inlineStyles[$bID] = "div.ccm-page .acc-third-party-wrapper-{$bID} iframe { background-image: url('$thumbnailURL'); }";
+            $this->inlineStyles[$bID] = "div.ccm-page .acc-{$block->getBlockTypeHandle()}.acc-third-party-{$bID}.acc-opt-out { background-image: url('$thumbnailURL'); }";
         }
     }
 

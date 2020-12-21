@@ -5,8 +5,7 @@ mix.webpackConfig({
         symlinks: false
     },
     externals: {
-        jquery: 'jQuery',
-        vue: 'Vue',
+        jquery: 'jQuery'
     }
 })
 

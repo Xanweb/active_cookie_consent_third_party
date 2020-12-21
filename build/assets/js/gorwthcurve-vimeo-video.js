@@ -1,24 +1,25 @@
-import Config from './config'
 import ThirdParty from './third-party'
-
-const vimeoSelector = 'div.vimeoVidWrap'
 
 export default class GorwthcurveVimeoVideo extends ThirdParty {
 
-    display() {
-        $(vimeoSelector).each(function () {
-            const $self = $(this)
-            const $iframe = $self.find('iframe')
-            $iframe.attr('src', $iframe.attr('data-src'))
-
-            $self.find(`.${Config.overlayClass}`).remove()
-            if (typeof $.fn.fitVids !== 'undefined') {
-                $self.find('.vvResponsive').fitVids()
-            }
-        })
+    /**
+     * @return {string}
+     * @protected
+     */
+    get wrapperSelector() {
+        return `${super.wrapperSelector}.acc-growthcurve_vimeo_video`
     }
 
-    block() {
-        $(vimeoSelector).append(Config.getOverlayHTML())
+    display() {
+        $(this.wrapperSelector).each(function () {
+            const $iframe = $(this).find('iframe')
+            $iframe.attr('src', $iframe.attr('data-src'))
+        })
+
+        super.display()
+
+        if (typeof $.fn.fitVids !== 'undefined') {
+            $(`${this.wrapperSelector} .vvResponsive`).fitVids()
+        }
     }
 }

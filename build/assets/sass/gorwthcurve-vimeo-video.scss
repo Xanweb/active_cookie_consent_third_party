@@ -1,16 +1,13 @@
-.acc-third-party-wrapper {
-  .vimeoVidWrap {
-    position: relative;
+.acc-growthcurve_vimeo_video {
 
-    iframe {
-      width: 100%;
-    }
+  &.acc-opt-out iframe {
+    width: 100%;
+  }
 
-    .acc-block-overlay button.display-cookies-disclaimer-popup {
-      z-index: 10;
-      position: absolute;
-      left: 45%;
-      top: 45%;
-    }
+  .acc-block-overlay button.display-cookies-disclaimer-popup {
+    z-index: 10;
+    position: absolute;
+    left: 45%;
+    top: 45%;
   }
 }
