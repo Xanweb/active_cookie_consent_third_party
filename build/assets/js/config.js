@@ -21,7 +21,7 @@ export default class Config {
     }
 
     static getPopupMessageText() {
-        return Config._get()._data.i18n.third_party.popup_msg
+        return $('<div/>').html(Config._get()._data.i18n.third_party.popup_msg).text()
     }
 
     static getAcceptButtonText() {

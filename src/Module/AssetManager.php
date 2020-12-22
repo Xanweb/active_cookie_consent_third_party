@@ -25,7 +25,7 @@ class AssetManager
                     ['javascript', 'acc/third-party'],
                     ['css', 'acc/third-party'],
                 ],
-            ]
+            ],
         ]);
     }
 }

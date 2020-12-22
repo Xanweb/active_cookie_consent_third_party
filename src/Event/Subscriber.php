@@ -139,10 +139,27 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             return;
         }
 
-        $settings = $this->getThirdPartySettings($block->getBlockTypeHandle());
-        if ($settings !== null && $settings->isDefaultThumbnailUsed()
-            && !empty($thumbnailURL = $this->getThumbnailFromAPI($block))) {
-            $this->inlineStyles[$bID] = "div.ccm-page .acc-{$block->getBlockTypeHandle()}.acc-third-party-{$bID}.acc-opt-out { background-image: url('$thumbnailURL'); }";
+        $btHandle = $block->getBlockTypeHandle();
+        $settings = $this->getThirdPartySettings($btHandle);
+        if ($settings !== null && $settings->isDefaultThumbnailUsed()) {
+            if ($btHandle === 'youtube') {
+                $thumbnailURL = $this->getYoutubeThumbnailFromAPI($block);
+                if (!empty($thumbnailURL)) {
+                    $this->inlineStyles[$bID] = "div.ccm-page .acc-{$btHandle}.acc-third-party-{$bID}.acc-opt-out { background-image: url('{$thumbnailURL}'); }";
+                }
+            } elseif ($btHandle === 'growthcurve_vimeo_video' && !empty($blockVideoId = $block->getController()->get('vimeoVid'))) {
+                $data = @file_get_contents("https://vimeo.com/api/v2/video/$blockVideoId.json");
+                $data = @json_decode($data, true);
+                if (is_array($data)) {
+                    $thumbnailURL = $data[0]['thumbnail_large'] ?? $data[0]['thumbnail_medium'] ?? $data[0]['thumbnail_small'] ?? '';
+                    $style = !empty($thumbnailURL) ? "background-image: url('{$thumbnailURL}'); " : '';
+                    $style .= (!($block->getController()->get('vvHeight') > 0) && isset($data[0]['height'])) ? "height: {$data[0]['height']}px; " : '';
+                    if (!empty($style)) {
+                        $this->inlineStyles[$bID] = "div.ccm-page .acc-{$btHandle}.acc-third-party-{$bID}.acc-opt-out { {$style}}";
+                    }
+                }
+            }
+
             if ($this->cssInlineAsset === null) {
                 $r = ResponseAssetGroup::get();
                 /** @noinspection PhpUnhandledExceptionInspection */
@@ -153,7 +170,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         }
     }
 
-    protected function getThumbnailFromAPI(Block $block): string
+    protected function getYoutubeThumbnailFromAPI(Block $block): string
     {
         $btHandle = $block->getBlockTypeHandle();
         $videoThumbnail = '';
@@ -177,10 +194,6 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             if (!empty($videoID)) {
                 $videoThumbnail = "//img.youtube.com/vi/{$videoID}/hqdefault.jpg";
             }
-        } elseif ($btHandle === 'growthcurve_vimeo_video' && !empty($blockVideoId = $block->getController()->get('vimeoVid'))) {
-            $data = @file_get_contents("//vimeo.com/api/v2/video/$blockVideoId.json");
-            $data = @json_decode($data, true);
-            $videoThumbnail = $data[0]['thumbnail_large'] ?? $data[0]['thumbnail_medium'] ?? $data[0]['thumbnail_small'] ?? '';
         }
 
         return $videoThumbnail;
