@@ -1,74 +1,21 @@
-class Youtube {
-    constructor($element, options) {
-        const my = this
-        my.$element = $element
-        my.$iframe = my.$element.find('iframe')
-        my.src = my.$iframe.data('src')
-        my.alt = my.$iframe.data('alt') || 'Accept Third Party'
-        my.active = my.$iframe.data('activate') || 0
-        my.buttonTemplate = '<button class="btn btn-info center-block display-cookies-disclaimer-popup">' + my.alt + '</button>'
-        if (!my.active) {
-            my.blockVideo()
-        } else {
-            my.showVideo()
-        }
+import ThirdParty from './third-party'
 
-        window.ACC.registerThirdParty(this)
-    }
+export default class Youtube extends ThirdParty {
 
     /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     *
-     * @returns {boolean}
+     * @return {string}
+     * @protected
      */
-    isEnabled() {
-        return this.active
+    get wrapperSelector() {
+        return `${super.wrapperSelector}.acc-youtube`
     }
 
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    enable() {
-        if (!this.active) {
-            this.showVideo()
-            this.active = true
-        }
-    }
+    display() {
+        $(this.wrapperSelector).each(function () {
+            const $iframe = $(this).find('iframe')
+            $iframe.attr('src', $iframe.attr('data-src'))
+        })
 
-    /**
-     * Method Required by {ThirdPartyManager} class under ACC
-     */
-    disable() {
-        if (this.active) {
-            this.blockVideo()
-            this.active = false
-        }
-    }
-
-    isAccepted() {
-        return !window.ACC.UserPrivacy.isOptedOut('thirdParty')
-    }
-
-    showVideo() {
-        this.$iframe.prop('src', this.src)
-        this.$element.find('button.display-cookies-disclaimer-popup').remove()
-    }
-
-    blockVideo() {
-        this.$element.append(this.buttonTemplate)
+        super.display()
     }
 }
-
-$.fn.xwACCYoutube = function(options) {
-    return $.each($(this), function(i, obj) {
-        new Youtube($(this), options)
-    })
-}
-
-// Setup AutoStart
-$(function () {
-    const youtubePlayer = $('div.youtubeBlock')
-    if (youtubePlayer.length > 0) {
-        youtubePlayer.xwACCYoutube()
-    }
-})

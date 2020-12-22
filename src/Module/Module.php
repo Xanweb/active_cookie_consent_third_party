@@ -2,11 +2,11 @@
 
 namespace Concrete\Package\ActiveCookieConsentThirdParty\Module;
 
-use Concrete\Core\Block\Events\BlockOutput;
+use Concrete\Core\Block\Block;
 use Concrete\Core\Filesystem\Element;
 use Concrete\Core\Foundation\ClassAliasList;
-use Concrete\Core\View\View;
 use Concrete\Package\ActiveCookieConsent\Module\Module as AbstractModule;
+use Concrete\Package\ActiveCookieConsentThirdParty\Event\Subscriber;
 
 class Module extends AbstractModule
 {
@@ -28,19 +28,11 @@ class Module extends AbstractModule
     public static function boot()
     {
         $aliasList = ClassAliasList::getInstance();
-        $aliasList->registerMultiple(static::getClassAliases());
+        $aliasList->registerMultiple(self::getClassAliases());
 
-        if (!app('helper/concrete/dashboard')->canRead()) {
-            app('director')->addListener('on_block_output', function (BlockOutput $event) {
-                if ($event->getBlock()->getBlockTypeHandle() === 'growthcurve_vimeo_video') {
-                    $v = View::getInstance();
-                    $v->requireAsset('block/gorwthcurve-vimeo-video');
-
-                    $event->setContents(
-                        str_replace(['<iframe', 'src='], ['<iframe data-alt="' . t('Accept Third Party') . '"', 'data-src='], $event->getContents())
-                    );
-                }
-            });
+        $app = self::app();
+        if (!$app['helper/concrete/dashboard']->canRead()) {
+            $app['director']->addSubscriber($app->build(Subscriber::class));
         }
 
         AssetManager::register();
@@ -51,7 +43,7 @@ class Module extends AbstractModule
      *
      * @return Element
      */
-    public static function getDashboardOptionsElement($siteTree)
+    public static function getDashboardOptionsElement($siteTree): Element
     {
         return new Element('dashboard/options', self::pkgHandle(), ['siteTree' => $siteTree]);
     }
@@ -61,8 +53,17 @@ class Module extends AbstractModule
      *
      * @return Element
      */
-    public static function getOptoutOptionsElement($siteTree)
+    public static function getOptoutOptionsElement($siteTree): Element
     {
         return new Element('third_party_optout/options', self::pkgHandle(), ['siteTree' => $siteTree]);
+    }
+
+    public static function supports(Block $block): bool
+    {
+        return in_array(
+            $block->getBlockTypeHandle(),
+            ['youtube', 'growthcurve_vimeo_video', 'google_map'],
+            true
+        );
     }
 }

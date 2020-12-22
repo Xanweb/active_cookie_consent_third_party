@@ -5,9 +5,7 @@ mix.webpackConfig({
         symlinks: false
     },
     externals: {
-        jquery: 'jQuery',
-        vue: 'Vue',
-        cookie: 'Cookie'
+        jquery: 'jQuery'
     }
 })
 
@@ -17,14 +15,8 @@ mix.options({
 
 mix.setPublicPath('..')
 
-mix.sass('assets/sass/google-map.scss', 'css')
-    .js('assets/js/google-map.js', 'js')
-
-mix.sass('assets/sass/youtube.scss', 'css')
-    .js('assets/js/youtube.js', 'js')
-
-mix.sass('assets/sass/gorwthcurve-vimeo-video.scss', 'css')
-    .js('assets/js/gorwthcurve-vimeo-video.js', 'js')
+mix.js('assets/js/index.js', 'js/acc-third-party.js')
+   .sass('assets/sass/main.scss', 'css/acc-third-party.css')
 
 mix.disableNotifications()
 
