@@ -44,7 +44,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             'on_block_load' => ['youtubeForceNoCookie'],
             'on_block_output' => ['thirdPartiesOptOut'],
             'on_before_render' => ['registerAssets'],
-            'on_page_output' => ['googleMapOptOut'],
+            'on_page_output' => ['onPageOutput'],
         ];
     }
 
@@ -112,11 +112,20 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
      *
      * @param GenericEvent $event
      */
-    public function googleMapOptOut(GenericEvent $event): void
+    public function onPageOutput(GenericEvent $event): void
     {
+        /* google Map OptOut */
         $event->setArgument('contents', preg_replace(
             '#<script(.*) src="(.*)maps.googleapis.com/maps/api/js#',
             '<script$1 data-src="$2maps.googleapis.com/maps/api/js',
+            $event->getArgument('contents')
+        ));
+
+        /* Google Recaptcha v3 */
+        $config = $this->app->make('config');
+        $assetUrl = $config->get('captcha.recaptcha_v3.url.javascript_asset');
+        $event->setArgument('contents', str_replace('<script type="text/javascript" src="' . $assetUrl . '"',
+            '<script type="application/usercentrics" data-lead="googlerecaptcha" src="'. $assetUrl . '"',
             $event->getArgument('contents')
         ));
     }
