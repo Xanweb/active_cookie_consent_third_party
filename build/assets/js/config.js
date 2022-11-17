@@ -45,7 +45,13 @@ export default class Config {
             advancedClasses = 'w-100 mb-2'
         }
         if (acceptButtonAction === 'show_popup' || acceptButtonAction === 'both_action') {
-            buttonsHtml = buttonsHtml.concat(Config.getThirdPartyButtonHTML('show_popup', Config.getShowPopupButtonText(), advancedClasses))
+
+            let buttonText = Config.getAcceptButtonText()
+            if (acceptButtonAction === 'both_action') {
+                buttonText = Config.getShowPopupButtonText()
+            }
+
+            buttonsHtml = buttonsHtml.concat(Config.getThirdPartyButtonHTML('show_popup', buttonText, advancedClasses))
         }
         if (acceptButtonAction === 'accept_third_party' || acceptButtonAction === 'both_action') {
             buttonsHtml = buttonsHtml.concat(Config.getThirdPartyButtonHTML('accept_third_party', Config.getAcceptButtonText(), advancedClasses))
