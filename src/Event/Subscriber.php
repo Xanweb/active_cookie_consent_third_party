@@ -114,20 +114,27 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
      */
     public function onPageOutput(GenericEvent $event): void
     {
+        $contents = $event->getArgument('contents');
         /* google Map OptOut */
-        $event->setArgument('contents', preg_replace(
+        $contents = preg_replace(
             '#<script(.*) src="(.*)maps.googleapis.com/maps/api/js#',
             '<script$1 data-src="$2maps.googleapis.com/maps/api/js',
-            $event->getArgument('contents')
-        ));
+            $contents);
 
         /* Google Recaptcha v3 */
+        $contents = preg_replace(
+            '#<script(.*) src="(.*)js/captcha/recaptchav3.js#',
+            '<script$1 data-src="$2js/captcha/recaptchav3.js',
+            $contents
+        );
+
         $config = $this->app->make('config');
         $assetUrl = $config->get('captcha.recaptcha_v3.url.javascript_asset');
-        $event->setArgument('contents', str_replace('<script type="text/javascript" src="' . $assetUrl . '"',
-            '<script type="application/usercentrics" data-lead="googlerecaptcha" src="'. $assetUrl . '"',
-            $event->getArgument('contents')
-        ));
+        $contents = str_replace('<script type="text/javascript" src="' . $assetUrl . '"',
+            '<script type="text/javascript" data-lead="googlerecaptcha" data-src="'. $assetUrl . '"',
+            $contents
+        );
+        $event->setArgument('contents', $contents);
     }
 
     protected function getThirdPartySettings(string $btHandle): ?ThirdPartySettingEntity
