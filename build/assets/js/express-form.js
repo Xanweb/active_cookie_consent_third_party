@@ -50,6 +50,6 @@ export default class ExpressForm extends ThirdParty {
     }
 
     static getPopupMessageText() {
-        return $('<div/>').html(Config._get()._data.i18n.third_party.popup_msg).text()
+        return $('<div/>').html(Config._get()._data.i18n.third_party.popup_captcha_msg || '').text()
     }
 }
