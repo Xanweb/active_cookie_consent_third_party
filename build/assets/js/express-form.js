@@ -30,8 +30,6 @@ export default class ExpressForm extends ThirdParty {
     }
 
     block() {
-        let test = $(this.wrapperSelector)
-        console.log(test)
         $(this.wrapperSelector)
             .find('div.captcha')
             .append(ExpressForm.getOverlayHTML())
