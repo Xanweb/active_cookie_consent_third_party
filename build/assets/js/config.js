@@ -33,7 +33,7 @@ export default class Config {
     }
 
     static getAcceptButtonHTML() {
-        return `<button class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="${Config.getAcceptButtonAction()}">${Config.getAcceptButtonText()}</button>`
+        return `<button type="button" class="btn btn-info center-block display-cookies-disclaimer-popup" data-accept-function="${Config.getAcceptButtonAction()}">${Config.getAcceptButtonText()}</button>`
     }
 
     static getOverlayHTML() {
