@@ -40,21 +40,21 @@ export default class Config {
     static getAcceptButtonHTML() {
         let buttonsHtml = ''
         let acceptButtonAction = Config.getAcceptButtonAction()
+        let advancedClasses = ''
+        if (acceptButtonAction === 'both_action') {
+            advancedClasses = 'w-100 mb-2'
+        }
         if (acceptButtonAction === 'show_popup' || acceptButtonAction === 'both_action') {
-            buttonsHtml = buttonsHtml.concat(Config.getShowPopupButtonHTML())
+            buttonsHtml = buttonsHtml.concat(Config.getThirdPartyButtonHTML('show_popup', Config.getShowPopupButtonText(), advancedClasses))
         }
         if (acceptButtonAction === 'accept_third_party' || acceptButtonAction === 'both_action') {
-            buttonsHtml = buttonsHtml.concat(Config.getAcceptThirdPartyButtonHTML())
+            buttonsHtml = buttonsHtml.concat(Config.getThirdPartyButtonHTML('accept_third_party', Config.getAcceptButtonText(), advancedClasses))
         }
         return buttonsHtml
     }
 
-    static getShowPopupButtonHTML() {
-        return `<button type="button" class="btn btn-info center-block display-cookies-disclaimer-popup w-100 mb-2" data-accept-function="show_popup">${Config.getShowPopupButtonText()}</button>`
-    }
-
-    static getAcceptThirdPartyButtonHTML() {
-        return `<button type="button" class="btn btn-info center-block display-cookies-disclaimer-popup w-100 mb-2" data-accept-function="accept_third_party">${Config.getAcceptButtonText()}</button>`
+    static getThirdPartyButtonHTML(action = 'show_popup', message = '', advancedClasses = '') {
+        return `<button type="button" class="btn btn-info center-block display-cookies-disclaimer-popup ${advancedClasses}" data-accept-function="${action}">${message}</button>`
     }
 
     static getOverlayHTML() {
