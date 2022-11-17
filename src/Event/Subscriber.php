@@ -128,12 +128,12 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             $contents
         );
 
-        $config = $this->app->make('config');
-        $assetUrl = $config->get('captcha.recaptcha_v3.url.javascript_asset');
-        $contents = str_replace('<script type="text/javascript" src="' . $assetUrl . '"',
-            '<script type="text/javascript" data-lead="googlerecaptcha" data-src="'. $assetUrl . '"',
+        $contents = preg_replace(
+            '#<script(.*) src="(.*)www.google.com/recaptcha/api.js(.*)#',
+            '<script$1 data-src="$2www.google.com/recaptcha/api.js$3',
             $contents
         );
+
         $event->setArgument('contents', $contents);
     }
 

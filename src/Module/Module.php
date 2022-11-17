@@ -63,7 +63,7 @@ class Module extends AbstractModule
     {
         $blockHandles = ['youtube', 'growthcurve_vimeo_video', 'google_map'];
         $scl = SystemCaptchaLibrary::getActive();
-        if ($scl->getSystemCaptchaLibraryHandle() === 'recaptchaV3' || $scl->getSystemCaptchaLibraryHandle() === 'recaptchaV2') {
+        if ($scl->getSystemCaptchaLibraryHandle() === 'recaptchaV3' || $scl->getSystemCaptchaLibraryHandle() === 'recaptcha') {
             $blockHandles = array_merge($blockHandles, ['express_form', 'form']);
         }
         return $blockHandles;

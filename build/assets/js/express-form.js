@@ -11,7 +11,7 @@ export default class ExpressForm extends ThirdParty {
     }
 
     display() {
-        $('script[data-lead=googlerecaptcha]').each(function() {
+        $('script[data-src*="www.google.com/recaptcha/api.js"]').each(function() {
             $(this).attr('src', $(this).attr('data-src'))
         })
 
@@ -30,6 +30,8 @@ export default class ExpressForm extends ThirdParty {
     }
 
     block() {
+        let test = $(this.wrapperSelector)
+        console.log(test)
         $(this.wrapperSelector)
             .find('div.captcha')
             .append(ExpressForm.getOverlayHTML())
