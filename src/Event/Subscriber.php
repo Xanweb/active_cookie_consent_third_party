@@ -121,13 +121,6 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             '<script$1 data-src="$2maps.googleapis.com/maps/api/js',
             $contents);
 
-        /* Google Recaptcha v3 */
-        $contents = preg_replace(
-            '#<script(.*) src="(.*)js/captcha/recaptchav3.js#',
-            '<script$1 data-src="$2js/captcha/recaptchav3.js',
-            $contents
-        );
-
         $contents = preg_replace(
             '#<script(.*) src="(.*)www.google.com/recaptcha/api.js(.*)#',
             '<script$1 data-src="$2www.google.com/recaptcha/api.js$3',

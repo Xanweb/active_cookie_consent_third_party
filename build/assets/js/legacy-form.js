@@ -15,10 +15,6 @@ export default class LegacyForm extends ThirdParty {
             $(this).attr('src', $(this).attr('data-src'))
         })
 
-        $('script[data-src*="js/captcha/recaptchav3.js"]').each(function() {
-            $(this).attr('src', $(this).attr('data-src'))
-        })
-
         $(this.wrapperSelector)
             .find('div.captcha')
             .removeClass('acc-opt-out')
