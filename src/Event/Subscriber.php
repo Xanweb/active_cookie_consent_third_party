@@ -8,6 +8,7 @@ use Concrete\Core\Asset\CssInlineAsset;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Block\Events\BlockOutput;
 use Concrete\Core\Http\ResponseAssetGroup;
+use Concrete\Package\ActiveCookieConsent\Config\CookieDisclaimer;
 use Concrete\Package\ActiveCookieConsent\Entity\ThirdPartySetting as ThirdPartySettingEntity;
 use Concrete\Package\ActiveCookieConsent\Service\Entity\ThirdPartySetting as ThirdPartySettingSVC;
 use Concrete\Package\ActiveCookieConsentThirdParty\Module\Module;
@@ -40,6 +41,9 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
      */
     public static function getSubscribedEvents(): array
     {
+        if (!app(CookieDisclaimer::class)->isEnabled()) {
+            return [];
+        }
         return [
             'on_block_load' => ['youtubeForceNoCookie'],
             'on_block_output' => ['thirdPartiesOptOut'],
