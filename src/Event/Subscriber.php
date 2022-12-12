@@ -48,7 +48,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             'on_block_load' => ['youtubeForceNoCookie'],
             'on_block_output' => ['thirdPartiesOptOut'],
             'on_before_render' => ['registerAssets'],
-            'on_page_output' => ['onPageOutput'],
+            'on_page_output' => ['onPageOutput', 10],
         ];
     }
 
@@ -130,6 +130,39 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             '<script$1 data-src="$2www.google.com/recaptcha/api.js$3',
             $contents
         );
+
+        $contents = preg_replace(
+            '#<div(.*) class="grecaptcha-box(.*)"(.*)>(.*)</div>#',
+            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div$1 class="grecaptcha-box$2" $3>$4</div></div>',
+            $contents
+        );
+        $contents = preg_replace(
+            '#<div(.*) class="g-recaptcha(.*)"(.*)>(.*)</div>#',
+            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div$1 class="g-recaptcha$2" $3>$4</div></div>',
+            $contents
+        );
+
+        $contents = preg_replace_callback(
+            '#<iframe(.*) src="(.*)"(.*)>(.*)</iframe>#',
+            function ($matches) {
+                if (strpos((string) $matches[2],'youtube.com') !== false || strpos($matches[2], 'youtube-nocookie.com') !== false) {
+                    return '<div class="acc-third-party-wrapper acc-third_party_youtube"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
+                }
+
+                if (strpos((string) $matches[2],'vimeo.com') !== false) {
+                    return '<div class="acc-third-party-wrapper acc-third_party_vimeo"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
+                }
+
+                return $matches[0];
+            },
+            $contents);
+
+        $contents = preg_replace_callback(
+            '#<div(.*) data-third-party="(.*)" (.*)>(.*)</div>#',
+            function ($matches) {
+                return '<div class="acc-third-party-wrapper acc-third_party_' . $matches[2] . '"><div'.$matches[1] . $matches[3].'>'.$matches[4].'</div></div>';
+            },
+            $contents);
 
         $event->setArgument('contents', $contents);
     }
