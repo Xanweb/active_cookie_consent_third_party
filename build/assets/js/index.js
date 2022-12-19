@@ -20,4 +20,5 @@ $(function () {
     window.ACC.registerThirdParty(new ThirdPartyYoutube())
 
     document.dispatchEvent(new Event(`ACC.ThirdParty.loaded`))
+    window.ACC.third_party_loaded = true
 })

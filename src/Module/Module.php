@@ -6,8 +6,11 @@ use Concrete\Core\Block\Block;
 use Concrete\Core\Captcha\Library as SystemCaptchaLibrary;
 use Concrete\Core\Filesystem\Element;
 use Concrete\Core\Foundation\ClassAliasList;
+use Concrete\Core\Routing\RouteListInterface;
+use Concrete\Core\Support\Facade\Route;
 use Concrete\Package\ActiveCookieConsent\Module\Module as AbstractModule;
 use Concrete\Package\ActiveCookieConsentThirdParty\Event\Subscriber;
+use Concrete\Package\ActiveCookieConsentThirdParty\Route\RouteList;
 
 class Module extends AbstractModule
 {
@@ -37,6 +40,30 @@ class Module extends AbstractModule
         }
 
         AssetManager::register();
+
+        // Register Route Lists
+        if (is_array($routeListClasses = static::getRoutesClasses()) && $routeListClasses !== []) {
+            $router = Route::getFacadeRoot();
+            foreach ($routeListClasses as $routeListClass) {
+                if (is_subclass_of($routeListClass, RouteListInterface::class)) {
+                    $router->loadRouteList($app->build($routeListClass));
+                } else {
+                    throw new \RuntimeException(t('%s:%s - `%s` should be an instance of `%s`', static::class, 'getRoutesClasses', (string) $routeListClass, RouteListInterface::class));
+                }
+            }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @see AbstractModule::getRoutesClasses()
+     */
+    protected static function getRoutesClasses(): array
+    {
+        return [
+            RouteList::class,
+        ];
     }
 
     /**

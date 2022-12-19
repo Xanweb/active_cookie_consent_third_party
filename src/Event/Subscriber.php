@@ -143,14 +143,35 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         );
 
         $contents = preg_replace_callback(
-            '#<iframe(.*) src="(.*)"(.*)>(.*)</iframe>#',
+            '#<iframe(.*) src="([\S]*)"(.*)>(.*)</iframe>#',
             function ($matches) {
                 if (strpos((string) $matches[2],'youtube.com') !== false || strpos($matches[2], 'youtube-nocookie.com') !== false) {
-                    return '<div class="acc-third-party-wrapper acc-third_party_youtube"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
+                    $id = last(explode('/', $matches[2]));
+                    if (strpos($id, '?') !== false) {
+                        list($id, $pops) = explode('?', $id);
+                        if ($id === 'watch') {
+                            foreach (explode('&', $pops) as $pop) {
+                                if (str_starts_with($pop, 'v=')) {
+                                    $id = substr($pop, 2);
+                                }
+                            }
+                        }
+                    }
+
+                    $backgroundURL = \URL::to("/xw/acc/background/youtube/{$id}");
+                    $this->inlineStyles["youtube-{$id}"] = "div.ccm-page .acc-third_party_youtube.acc-youtube_{$id}.acc-opt-out {background-image: url('{$backgroundURL}'); }";
+                    return '<div class="acc-third-party-wrapper acc-third_party_youtube acc-youtube_'.$id.'"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
                 }
 
                 if (strpos((string) $matches[2],'vimeo.com') !== false) {
-                    return '<div class="acc-third-party-wrapper acc-third_party_vimeo"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
+                    $id = last(explode('/', $matches[2]));
+                    if (strpos($id, '?') !== false) {
+                        $id = array_first(explode('?', $id));
+                    }
+
+                    $backgroundURL = \URL::to("/xw/acc/background/vimeo/{$id}");
+                    $this->inlineStyles["vimeo-{$id}"] = "div.ccm-page .acc-third_party_vimeo.acc-vimeo_{$id}.acc-opt-out {background-image: url('{$backgroundURL}'); }";
+                    return '<div class="acc-third-party-wrapper acc-third_party_vimeo acc-vimeo_'.$id.'"><iframe'.$matches[1].' data-src="'.$matches[2].'"'.$matches[3].'>'.$matches[4].'</iframe></div>';
                 }
 
                 return $matches[0];
@@ -158,11 +179,19 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             $contents);
 
         $contents = preg_replace_callback(
-            '#<div(.*) data-third-party="(.*)" (.*)>(.*)</div>#',
+            '#<div(.*) data-third-party="([\S]*)"(.*)>(.*)</div>#',
             function ($matches) {
                 return '<div class="acc-third-party-wrapper acc-third_party_' . $matches[2] . '"><div'.$matches[1] . $matches[3].'>'.$matches[4].'</div></div>';
             },
             $contents);
+
+        if (!isset($this->cssInlineAsset)) {
+            $this->cssInlineAsset = new CssInlineAsset();
+        }
+
+        $this->cssInlineAsset->setAssetURL(implode(PHP_EOL, $this->inlineStyles));
+
+        $contents = str_replace('</head>', (string)$this->cssInlineAsset . ' </head>', $contents);
 
         $event->setArgument('contents', $contents);
     }
@@ -189,59 +218,39 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         $settings = $this->getThirdPartySettings($btHandle);
         if ($settings !== null && $settings->isDefaultThumbnailUsed()) {
             if ($btHandle === 'youtube') {
-                $thumbnailURL = $this->getYoutubeThumbnailFromAPI($block);
-                if (!empty($thumbnailURL)) {
-                    $this->inlineStyles[$bID] = "div.ccm-page .acc-{$btHandle}.acc-third-party-{$bID}.acc-opt-out { background-image: url('{$thumbnailURL}'); }";
+                $videoURL = $block->getController()->get('videoURL');
+                $id = last(explode('/', $videoURL));
+                if (strpos($id, '?') !== false) {
+                    list($id, $pops) = explode('?', $id);
+                    if ($id === 'watch') {
+                        foreach (explode('&', $pops) as $pop) {
+                            if (str_starts_with($pop, 'v=')) {
+                                $id = substr($pop, 2);
+                            }
+                        }
+                    }
                 }
-            } elseif ($btHandle === 'growthcurve_vimeo_video' && !empty($blockVideoId = $block->getController()->get('vimeoVid'))) {
+
+                $thumbnailURL = \URL::to("/xw/acc/background/youtube/{$id}");
+                $this->inlineStyles[$bID] = "div.ccm-page .acc-$btHandle.acc-third-party-$bID.acc-opt-out { background-image: url('$thumbnailURL'); }";
+            } elseif (($btHandle === 'growthcurve_vimeo_video' || $btHandle === 'xw_vimeo') && !empty($blockVideoId = $block->getController()->get('vimeoVid'))) {
                 $data = @file_get_contents("https://vimeo.com/api/v2/video/$blockVideoId.json");
                 $data = @json_decode($data, true);
                 if (is_array($data)) {
-                    $thumbnailURL = $data[0]['thumbnail_large'] ?? $data[0]['thumbnail_medium'] ?? $data[0]['thumbnail_small'] ?? '';
-                    $style = !empty($thumbnailURL) ? "background-image: url('{$thumbnailURL}'); " : '';
-                    $style .= (!($block->getController()->get('vvHeight') > 0) && isset($data[0]['height'])) ? "height: {$data[0]['height']}px; " : '';
+                    $thumbnailURL = \URL::to("/xw/acc/background/vimeo/{$blockVideoId}");
+                    $style = "background-image: url('{$thumbnailURL}'); ";
+                    if ($btHandle === 'xw_vimeo') {
+                        $style .= (!($block->getController()->get('height') > 0) && isset($data[0]['height'])) ? "height: {$data[0]['height']}px; " : '';
+                        $style .= (!($block->getController()->get('width') > 0) && isset($data[0]['width'])) ? "height: {$data[0]['width']}px; " : '';
+                    } else {
+                        $style .= (!($block->getController()->get('vvHeight') > 0) && isset($data[0]['height'])) ? "height: {$data[0]['height']}px; " : '';
+                    }
+
                     if (!empty($style)) {
-                        $this->inlineStyles[$bID] = "div.ccm-page .acc-{$btHandle}.acc-third-party-{$bID}.acc-opt-out { {$style}}";
+                        $this->inlineStyles[$bID] = "div.ccm-page .acc-$btHandle.acc-third-party-$bID.acc-opt-out { $style}";
                     }
                 }
             }
-
-            if ($this->cssInlineAsset === null) {
-                $r = ResponseAssetGroup::get();
-                /** @noinspection PhpUnhandledExceptionInspection */
-                $r->requireAsset($this->cssInlineAsset = new CssInlineAsset());
-            }
-
-            $this->cssInlineAsset->setAssetURL(implode(PHP_EOL, $this->inlineStyles));
         }
-    }
-
-    protected function getYoutubeThumbnailFromAPI(Block $block): string
-    {
-        $btHandle = $block->getBlockTypeHandle();
-        $videoThumbnail = '';
-        if ($btHandle === 'youtube' && !empty($videoURL = $block->getController()->videoURL)) {
-            $url = parse_url($videoURL);
-            $pathParts = explode('/', rtrim($url['path'], '/'));
-            parse_str($url['query'], $params);
-            $videoID = end($pathParts);
-
-            if (isset($url['query'])) {
-                parse_str($url['query'], $query);
-
-                if (isset($query['list'])) {
-                    $videoID = '';
-                } else {
-                    $videoID = $query['v'] ?? $videoID;
-                    $videoID = strtok($videoID, '?');
-                }
-            }
-
-            if (!empty($videoID)) {
-                $videoThumbnail = "//img.youtube.com/vi/{$videoID}/hqdefault.jpg";
-            }
-        }
-
-        return $videoThumbnail;
     }
 }
