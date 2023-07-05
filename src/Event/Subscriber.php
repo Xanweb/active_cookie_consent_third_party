@@ -132,18 +132,19 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
         );
 
         $contents = preg_replace(
-            '#<div(.*) class="grecaptcha-box(.*)"(.*)>(.*)</div>#',
-            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div$1 class="grecaptcha-box$2" $3>$4</div></div>',
+            '#<div([\S]*) class="grecaptcha-box([\S]*)"(.*)>(.*)</div>#',
+            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div $1 class="grecaptcha-box $2" $3> $4</div></div>',
             $contents
         );
+
         $contents = preg_replace(
-            '#<div(.*) class="g-recaptcha(.*)"(.*)>(.*)</div>#',
-            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div$1 class="g-recaptcha$2" $3>$4</div></div>',
+            '#<div([\S]*) class="g-recaptcha([\S]*)"(.*)>(.*)</div>#',
+            '<div class="acc-third-party-wrapper acc-third_party_recaptcha"><div $1 class="g-recaptcha $2" $3> $4</div></div>',
             $contents
         );
 
         $contents = preg_replace_callback(
-            '#<iframe(.*) src="([\S]*)"(.*)>(.*)</iframe>#',
+            '#<iframe([\S]*) src="([\S]*)"(.*)>(.*)</iframe>#',
             function ($matches) {
                 if (strpos((string) $matches[2],'youtube.com') !== false || strpos($matches[2], 'youtube-nocookie.com') !== false) {
                     $id = last(explode('/', $matches[2]));
@@ -179,7 +180,7 @@ class Subscriber implements EventSubscriberInterface, ApplicationAwareInterface
             $contents);
 
         $contents = preg_replace_callback(
-            '#<div(.*) data-third-party="([\S]*)"(.*)>(.*)</div>#',
+            '#<div([\S]*) data-third-party="([\S]*)"(.*)>(.*)</div>#',
             function ($matches) {
                 return '<div class="acc-third-party-wrapper acc-third_party_' . $matches[2] . '"><div'.$matches[1] . $matches[3].'>'.$matches[4].'</div></div>';
             },
